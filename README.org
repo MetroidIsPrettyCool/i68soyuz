@@ -8,24 +8,28 @@ supported, including TiEmu. If you want to use ~i68~, get ready to spend money o
 * Building
 A pre-built binary is already present under the ~bin~ directory of this repository. Unless you /really/ want to, there's
 no need to build ~i68soyuz~ from scratch.
-
+** I /Do/ Really Wanna
 ~i68soyuz~ requires the [[http://tigcc.ticalc.org/][TIGCC]] compiler to be built from source. Follow the instructions on TIGCC's website to install
 for your particular system, and then type ~make~ from the ~src~ directory of this repository to build. This will produce
 a file called ~i68soyuz.9xz~.
+
+If you're trying to build for a platform other than the TI-92 Plus, I suggest you start reading the TIGCC documentation.
 * Installation
 For the time being, installation of ~i68soyuz~ must be done manually. Linux users should use the [[http://lpg.ticalc.org/prj_tilp/][TiLP2]] linking program
-to transfer ~i68soyuz.9xz~ onto their calculator. If you don't want to use TiLP2 for whatever reason, you can use TI
-Connect, available for free from TI's website last I checked.
-
+to transfer ~i68soyuz.9xz~ onto their calculator. If you don't want to use TiLP2 for whatever reason, you can use the
+Windows-only TI Connect, available for free from TI's website. (Last I checked, anyway.) Given that ~i68~ is only meant
+to run under Linux, I don't know /why/ would want to do this, but I won't judge. Maybe Free Software killed your
+Grandma.
+** Re-Installation
 If ~i68soyuz~ is already present on your calculator and you are attempting to overwrite it, either because you want to
 update it to a newer version or because something went wrong, make sure it *isn't* archived. Archived programs can't be
 deleted or overwritten directly. You'll have to go into the Var-Link menu, select the file, and finally press ~F1~ and
-then ~8~ to unarchive the variable.
+then ~8~ to un-archive the variable.
 * How to Use
 1. Plug your TI-92 Plus into your computer with a SilverLink USB cable.
 2. From the ~Home~ screen, type ~i68soyuz()~ and then press ~ENTER~.
-3. You will be presented with a screen containing several lines of text, such as the version number and an instruction to
-   start ~i68apollo~. Do so, following the instructions in that project's ~README.org~
+3. You will be presented with a screen containing several lines of text, such as the version number and an instruction
+   to start ~i68apollo~. Do so, following the instructions in that project's ~README.org~
 4. Once ~i68apollo~ is running, go ahead and "press any key". ~i68soyuz~ and ~i68apollo~ will then exchange version
    information. If there is a version mismatch, both will mutually abort the connection. Otherwise, you should at this
    point be able to type on your computer with your calculator.
@@ -41,21 +45,26 @@ then ~8~ to unarchive the variable.
 - If ~i68soyuz~ crashes or fails to respond to the ~ON~ key, you can reset your calculator by removing the
   batteries--both the AAs and the CR2023 backup battery. Doing this will wipe the calculator's RAM. Make sure anything
   important is either backed up or archived!
-- Verify your TI-92 Plus is running AMS 2.09. I have no idea if older AMS versions could cause a fault, because I
-  haven't tested anything else. Furthermore, I haven't tested ~i68soyuz~ on an HW1 TI-92 Plus--i.e. an original model
-  TI-92 with the TI-92 Plus module. If you /are/ using an HW1 TI-92 Plus, I cannot help you. I would, however, like to
-  buy it off you.
-- No, ~i68soyuz~ won't work on original model TI-92. Nor will it work on the Voyage 200 or TI-89. Porting to the latter
-  two won't be difficult, but there's a lot of behavior hard-coded around the TI-92 Plus right now. It also won't work
-  on the TI-92 II, because as far as I can tell nobody ever bought one. If you have one, I'd love to buy it off you.
+- Verify your TI-92 Plus is running AMS 2.09. I don't actually know if older AMS versions could or would cause a fault,
+  because I haven't tested anything else, but I also don't know that that they couldn't or wouldn't.
+
+  Furthermore, I haven't tested ~i68soyuz~ on an HW1 TI-92 Plus--i.e. an original model TI-92 with the TI-92 Plus
+  module. If you /are/ using an HW1 TI-92 Plus, I cannot help you. (I would, however, like to buy it off you.)
+- ~i68soyuz~ won't work on original model TI-92. Nor will it work on the Voyage 200 or TI-89. Porting to the latter two
+  won't be difficult, but there's a lot of behavior hard-coded around the TI-92 Plus right now. It also won't work on
+  the TI-92 II, because as far as I can tell nobody ever bought one. (If you have one, I'd love to buy it off you.)
 * Additional Notes
-** Quirks and Misdemeanors
+** Quirks and Misdemeanors[fn:3]
 - ~i68soyuz~ treats the bottom two ~ENTER~ keys identically. This is because the TI-92 Plus internally treats these keys
-  identically. There is to my knowledge no way to distinguish them. The uppermost ~ENTER~ key, below the directional
+  identically. There is, to my knowledge, no way to distinguish them. The uppermost ~ENTER~ key, below the directional
   pad, /is/ distinguished from the other two.
 - Another consequence of the TI-92 Plus' keyboard's wiring is that pressing more than two keys at once can "trick" the
   calculator into thinking additional keys are being pressed that aren't. I won't go into the specifics because they
   require a lot of background knowledge and aren't very interesting, but I thought I'd mention it.
+- When ~i68soyuz~ prompts you to "Press any key" it actually means "Press any key except Shift, Diamond, Second or
+  Hand". The function used there to wait for a keypress has no conception of the modifier keys. If you /do/ press one,
+  it won't do anything besides set the modifier status--which ~i68soyuz~ will ignore--and display a small graphic on the
+  status line, which will remain until ~i68soyuz~ exits and you reset or change the modifier state.
 ** Future Improvements?
 - Future work could easily port ~i68soyuz~ to the closely-related[fn:2] TI-89 or Voyage 200 calculators; and with a lot
   more effort perhaps the original TI-92, or z80-based calculators like the TI-83 Plus; or in theory any other TI
@@ -68,13 +77,16 @@ then ~8~ to unarchive the variable.
   version, /then/ proceeding.
 - The current version (build 27, as of writing) masks and disables several interrupts for the duration of operation. I'd
   like to reduce this clobbering of the AMS somewhat.
+- I'd like to replace all the ~ngetchx~ calls with ~GKeyIn~.
 ** The Name
-~i68soyuz~ is named for the [[https://en.wikipedia.org/wiki/Apollo%E2%80%93Soyuz][Soyuz 19]] mission, one part of the joint Soviet-American /Apollo-Soyuz Test Project/. As I am
-American, and ~i68soyuz~ is the "foreign" component of ~i68~, I named it after the Soyuz. Conveniently, this fit
-perfectly within the TI-92 Plus' 8-character restriction on filenames.
+~i68soyuz~ is named for the Soyuz spacecraft used as part of the joint Soviet-American [[https://en.wikipedia.org/wiki/Apollo%E2%80%93Soyuz][Apollo-Soyuz Test Project]]. As I
+am American, and ~i68soyuz~ is the "foreign" component of ~i68~, I named it after the Soviet part of the
+mission. Conveniently, this also fit perfectly within the TI-92 Plus' 8-character restriction on filenames.
 
-~i68apollo~, the "local" component of ~i68~, was named likewise for the Apollo spacecraft flown as part of ASTP.
+~i68apollo~, the "local" component of ~i68~, was named likewise for the American spacecraft.
 * Footnotes
+[fn:3] https://www.youtube.com/watch?v=urcL86UpqZc&t=472s
+
 [fn:1] Alongside ~i68apollo~, which you can find by scrounging through my GitHub.
 
 [fn:2] They're the other two 68k-based TI calculators with link ports and built-in support for user-compiled binaries,
