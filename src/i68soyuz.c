@@ -8,6 +8,10 @@
 #include <stdio.h>
 #include <system.h>
 
+#define MAJOR_VER 0
+#define MINOR_VER 2
+#define PATCH_VER 0
+
 INT_HANDLER save_int_1;
 INT_HANDLER save_int_5;
 INT_HANDLER save_int_6;
@@ -85,7 +89,10 @@ void run(void) {
 
 void _main(void) {
     clrscr();
-    printf("i68 foreign component \"soyuz\"\n\nBuild 29\nPress any key to begin...\n");
+    printf("i68 foreign component \"soyuz\"\n\nBuild %d.%d.%d\nPress any key to begin...\n",
+           MAJOR_VER,
+           MINOR_VER,
+           PATCH_VER);
     ngetchx();
     printf("Started.\nPress ON at any time to quit.\n");
 
