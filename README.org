@@ -1,7 +1,7 @@
 * Introduction
-~i68soyuz~ is the calculator-based component of the two-part ~i68~ (**I**​nput **68**​000) prototype userspace
-driver[fn:3] intended to allow the use of a Texas Instruments TI-92 Plus calculator as an external keyboard under
-Linux.
+~i68soyuz~ is the calculator-based component of the two-part ~i68~ (*I*​nput from Motorola *68*​000-based calculator)
+prototype userspace driver[fn:1] intended to allow the use of a Texas Instruments TI-92 Plus calculator as an external
+keyboard under Linux.
 
 For the time being, ~i68~ requires that the TI-92 Plus be plugged in via a SilverLink cable. No other means are
 supported, including TiEmu. If you want to use ~i68~, get ready to spend money on old hardware.
@@ -57,9 +57,9 @@ then ~8~ to unarchive the variable.
   calculator into thinking additional keys are being pressed that aren't. I won't go into the specifics because they
   require a lot of background knowledge and aren't very interesting, but I thought I'd mention it.
 ** Future Improvements?
-- Future work could port this component to the closely-related[fn:2] TI-89 or Voyage 200 calculators, and with greater
-  effort still perhaps the TI-83 Plus, TI-84 plus, original TI-92, or any other TI calculator with a DBus-compatible
-  link port.
+- Future work could easily port ~i68soyuz~ to the closely-related[fn:2] TI-89 or Voyage 200 calculators; and with a lot
+  more effort perhaps the original TI-92, or z80-based calculators like the TI-83 Plus; or in theory any other TI
+  calculator with a DBus-compatible link port if I'm /really/ feeling it.
 - It'd be nice if the two components could send some configuration information between each other, such as which key
   should be used to exit, or how the calculator should report its key matrix.
 - It'd also be nice if ~i68soyuz~ could report its version to ~i68apollo~, to prevent potential incompatibility
@@ -75,8 +75,9 @@ then ~8~ to unarchive the variable.
 American, and ~i68soyuz~ is the "foreign" component of ~i68~, I named it after the Soyuz. Conveniently, this fit
 perfectly within the TI-92 Plus' 8-character restriction on filenames.
 
-~i68apollo~, the "local" component of ~i68~, was named likewise for the Apollo spacecraft flown as part of /ASTP/.
+~i68apollo~, the "local" component of ~i68~, was named likewise for the Apollo spacecraft flown as part of ASTP.
 * Footnotes
-[fn:3] Alongside ~i68apollo~, which you can find by scrounging through my GitHub.
+[fn:1] Alongside ~i68apollo~, which you can find by scrounging through my GitHub.
 
-[fn:2] The other two 68k-based TI calculators with link ports.
+[fn:2] They're the other two 68k-based TI calculators with link ports and built-in support for user-compiled binaries,
+or "ASM files" as TI calls them.
