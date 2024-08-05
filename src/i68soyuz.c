@@ -8,13 +8,16 @@
 #include <stdio.h>
 #include <system.h>
 
-#define MAJOR_VER 0
-#define MINOR_VER 2
-#define PATCH_VER 0
+#define MAJOR 0
+#define MINOR 1
+#define PATCH 2
 
 INT_HANDLER save_int_1;
 INT_HANDLER save_int_5;
 INT_HANDLER save_int_6;
+
+const unsigned char SOYUZ_VER[3] = {0, 3, 1};
+const unsigned char READY_BYTE = 0x50;
 
 volatile char break_key_pressed;
 unsigned char keymap[11] = {0};
@@ -87,14 +90,33 @@ void run(void) {
     }
 }
 
+int version_check() {
+    LIO_SendData(SOYUZ_VER, sizeof(SOYUZ_VER));
+
+    unsigned char apollo_ver[3] = {0};
+    LIO_RecvData(apollo_ver, sizeof(apollo_ver), 20); // wait 1 second/20 timer ticks
+
+    printf("apollo: %d.%d.%d\n", apollo_ver[MAJOR], apollo_ver[MINOR], apollo_ver[PATCH]);
+
+    return (apollo_ver[MAJOR] == SOYUZ_VER[MAJOR] && apollo_ver[MINOR] == SOYUZ_VER[MINOR]);
+}
+
 void _main(void) {
     clrscr();
-    printf("i68 foreign component \"soyuz\"\n\nBuild %d.%d.%d\nPress any key to begin...\n",
-           MAJOR_VER,
-           MINOR_VER,
-           PATCH_VER);
+    printf("i68 foreign component \"soyuz\"\n\nVersion: %d.%d.%d\nStart apollo\nThen press any key\n",
+           SOYUZ_VER[MAJOR],
+           SOYUZ_VER[MINOR],
+           SOYUZ_VER[PATCH]);
     ngetchx();
-    printf("Started.\nPress ON at any time to quit.\n");
+
+    LIO_SendData(&READY_BYTE, sizeof(READY_BYTE));
+    printf("Started.\n");
+
+    if (!version_check()) {
+        printf("verchk fail, aborting\n");
+        return;
+    }
+    printf("Press ON at any time to quit.\n");
 
     setup();
     run();

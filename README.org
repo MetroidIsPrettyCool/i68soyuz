@@ -24,18 +24,18 @@ then ~8~ to unarchive the variable.
 * How to Use
 1. Plug your TI-92 Plus into your computer with a SilverLink USB cable.
 2. From the ~Home~ screen, type ~i68soyuz()~ and then press ~ENTER~.
-
-   You will presented a screen containing some basic information, including a build number, and the instruction to
-   "Press any key to begin...". *Don't press any key until ~i68apollo~ is running.* It won't cause any harm, but it
-   won't /work/ either.
-3. Start ~i68apollo~, following the instructions in that project's ~README.org~
-4. Once ~i68apollo~ is running, go ahead and "press any key". At this point you should be able to type on your computer
-   with your calculator.
+3. You will be presented with a screen containing several lines of text, such as the version number and an instruction to
+   start ~i68apollo~. Do so, following the instructions in that project's ~README.org~
+4. Once ~i68apollo~ is running, go ahead and "press any key". ~i68soyuz~ and ~i68apollo~ will then exchange version
+   information. If there is a version mismatch, both will mutually abort the connection. Otherwise, you should at this
+   point be able to type on your computer with your calculator.
 5. Press the ~ON~ key on your calculator at any point to quit. This should also cause ~i68apollo~ to exit.
 * Troubleshooting
 - Ensure that your TI 92 Plus is plugged in, and that your USB ports are functioning correctly. Try running ~lsusb~ to
   determine if the SilverLink cable is visible to the operating system.
-- Ensure that ~i68apollo~ is running and hasn't crashed.
+- Ensure that ~i68apollo~ is running and hasn't crashed or aborted.
+- Ensure that the major (first number) and minor (second number) versions of ~i68soyuz~ and ~i68apollo~ match. If they
+  do not, you must install the up-to-date version of the offending component.
 - Ensure that you have only plugged in a single SilverLink cable into your PC. ~i68apollo~ is not smart enough to know
   it should be opening anything other than the first cable it finds.
 - If ~i68soyuz~ crashes or fails to respond to the ~ON~ key, you can reset your calculator by removing the
@@ -62,8 +62,6 @@ then ~8~ to unarchive the variable.
   calculator with a DBus-compatible link port if I'm /really/ feeling it.
 - It'd be nice if the two components could send some configuration information between each other, such as which key
   should be used to exit, or how the calculator should report its key matrix.
-- It'd also be nice if ~i68soyuz~ could report its version to ~i68apollo~, to prevent potential incompatibility
-  problems.
 - Manually loading ~i68soyuz~ onto the calculator is a pain, it'd be nice if ~i68apollo~ could do that automatically.
   Could probably be done by loading the calculator's directory, executing ~i68soyuz~ if found, checking its version
   against a table, and either proceeding if everything passes or else issuing a "silent download" to install the latest
