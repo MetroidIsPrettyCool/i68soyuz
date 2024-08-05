@@ -3,6 +3,8 @@
 prototype userspace driver[fn:1] intended to allow the use of a Texas Instruments TI-92 Plus calculator as an external
 keyboard under Linux.
 
+~i68soyuz~ requires its sister component ~i68apollo~ to function, which you can find [[https://github.com/MetroidIsPrettyCool/i68apollo][here]].
+
 For the time being, ~i68~ requires that the TI-92 Plus be plugged in via a SilverLink cable. No other means are
 supported, including TiEmu. If you want to use ~i68~, get ready to spend money on old hardware.
 * Building
