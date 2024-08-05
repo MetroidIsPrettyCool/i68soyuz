@@ -13,8 +13,7 @@
 INT_HANDLER save_int_1;
 INT_HANDLER save_int_5;
 
-volatile char break_key_pressed;
-unsigned char keymap[11] = {0};
+unsigned char keymap[10] = {0};
 
 void setup(void) {
     // ---------------save the default interrupt handlers---------------
@@ -66,14 +65,14 @@ void run(void) {
 
         restore_ints();
 
-        keymap[10] = OSCheckBreak();
+        keymap[1] += OSCheckBreak();
 
         unsigned short send_error = LIO_SendData(keymap, sizeof(keymap));
         if (send_error) {
             printf("Error sending data: %d\n", send_error);
         }
 
-        if (keymap[10]) {
+        if (keymap[1] & 1) {
             return;
         }
 
