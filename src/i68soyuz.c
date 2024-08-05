@@ -1,4 +1,3 @@
-// Local KeyBoard Monitor
 #define SAVE_SCREEN
 
 #define USE_TI92PLUS
@@ -86,8 +85,9 @@ void run(void) {
 
 void _main(void) {
     clrscr();
-    printf("Local KeyBoard Monitor\nBuild 26\nPress any key to begin\n");
+    printf("i68soyuz\ni68 foreign component\nBuild 27\nPress any key to begin...\n");
     ngetchx();
+    printf("Started. Press ON at any time to quit.\n");
 
     setup();
     run();

@@ -1,0 +1,82 @@
+* Introduction
+~i68soyuz~ is the calculator-based component of the two-part ~i68~ (**I**​nput **68**​000) prototype userspace
+driver[fn:3] intended to allow the use of a Texas Instruments TI-92 Plus calculator as an external keyboard under
+Linux.
+
+For the time being, ~i68~ requires that the TI-92 Plus be plugged in via a SilverLink cable. No other means are
+supported, including TiEmu. If you want to use ~i68~, get ready to spend money on old hardware.
+* Building
+A pre-built binary is already present under the ~bin~ directory of this repository. Unless you /really/ want to, there's
+no need to build ~i68soyuz~ from scratch.
+
+~i68soyuz~ requires the [[http://tigcc.ticalc.org/][TIGCC]] compiler to be built from source. Follow the instructions on TIGCC's website to install
+for your particular system, and then type ~make~ from the ~src~ directory of this repository to build. This will produce
+a file called ~i68soyuz.9xz~.
+* Installation
+For the time being, installation of ~i68soyuz~ must be done manually. Linux users should use the [[http://lpg.ticalc.org/prj_tilp/][TiLP2]] linking program
+to transfer ~i68soyuz.9xz~ onto their calculator. If you don't want to use TiLP2 for whatever reason, you can use TI
+Connect, available for free from TI's website last I checked.
+
+If ~i68soyuz~ is already present on your calculator and you are attempting to overwrite it, either because you want to
+update it to a newer version or because something went wrong, make sure it *isn't* archived. Archived programs can't be
+deleted or overwritten directly. You'll have to go into the Var-Link menu, select the file, and finally press ~F1~ and
+then ~8~ to unarchive the variable.
+* How to Use
+1. Plug your TI-92 Plus into your computer with a SilverLink USB cable.
+2. From the ~Home~ screen, type ~i68soyuz()~ and then press ~ENTER~.
+
+   You will presented a screen containing some basic information, including a build number, and the instruction to
+   "Press any key to begin...". *Don't press any key until ~i68apollo~ is running.* It won't cause any harm, but it
+   won't /work/ either.
+3. Start ~i68apollo~, following the instructions in that project's ~README.org~
+4. Once ~i68apollo~ is running, go ahead and "press any key". At this point you should be able to type on your computer
+   with your calculator.
+5. Press the ~ON~ key on your calculator at any point to quit. This should also cause ~i68apollo~ to exit.
+* Troubleshooting
+- Ensure that your TI 92 Plus is plugged in, and that your USB ports are functioning correctly. Try running ~lsusb~ to
+  determine if the SilverLink cable is visible to the operating system.
+- Ensure that ~i68apollo~ is running and hasn't crashed.
+- Ensure that you have only plugged in a single SilverLink cable into your PC. ~i68apollo~ is not smart enough to know
+  it should be opening anything other than the first cable it finds.
+- If ~i68soyuz~ crashes or fails to respond to the ~ON~ key, you can reset your calculator by removing the
+  batteries--both the AAs and the CR2023 backup battery. Doing this will wipe the calculator's RAM. Make sure anything
+  important is either backed up or archived!
+- Verify your TI-92 Plus is running AMS 2.09. I have no idea if older AMS versions could cause a fault, because I
+  haven't tested anything else. Furthermore, I haven't tested ~i68soyuz~ on an HW1 TI-92 Plus--i.e. an original model
+  TI-92 with the TI-92 Plus module. If you /are/ using an HW1 TI-92 Plus, I cannot help you. I would, however, like to
+  buy it off you.
+- No, ~i68soyuz~ won't work on original model TI-92. Nor will it work on the Voyage 200 or TI-89. Porting to the latter
+  two won't be difficult, but there's a lot of behavior hard-coded around the TI-92 Plus right now. It also won't work
+  on the TI-92 II, because as far as I can tell nobody ever bought one. If you have one, I'd love to buy it off you.
+* Additional Notes
+** Quirks and Misdemeanors
+- ~i68soyuz~ treats the bottom two ~ENTER~ keys identically. This is because the TI-92 Plus internally treats these keys
+  identically. There is to my knowledge no way to distinguish them. The uppermost ~ENTER~ key, below the directional
+  pad, /is/ distinguished from the other two.
+- Another consequence of the TI-92 Plus' keyboard's wiring is that pressing more than two keys at once can "trick" the
+  calculator into thinking additional keys are being pressed that aren't. I won't go into the specifics because they
+  require a lot of background knowledge and aren't very interesting, but I thought I'd mention it.
+** Future Improvements?
+- Future work could port this component to the closely-related[fn:2] TI-89 or Voyage 200 calculators, and with greater
+  effort still perhaps the TI-83 Plus, TI-84 plus, original TI-92, or any other TI calculator with a DBus-compatible
+  link port.
+- It'd be nice if the two components could send some configuration information between each other, such as which key
+  should be used to exit, or how the calculator should report its key matrix.
+- It'd also be nice if ~i68soyuz~ could report its version to ~i68apollo~, to prevent potential incompatibility
+  problems.
+- Manually loading ~i68soyuz~ onto the calculator is a pain, it'd be nice if ~i68apollo~ could do that automatically.
+  Could probably be done by loading the calculator's directory, executing ~i68soyuz~ if found, checking its version
+  against a table, and either proceeding if everything passes or else issuing a "silent download" to install the latest
+  version, /then/ proceeding.
+- The current version (build 27, as of writing) masks and disables several interrupts for the duration of operation. I'd
+  like to reduce this clobbering of the AMS somewhat.
+** The Name
+~i68soyuz~ is named for the [[https://en.wikipedia.org/wiki/Apollo%E2%80%93Soyuz][Soyuz 19]] mission, one part of the joint Soviet-American /Apollo-Soyuz Test Project/. As I am
+American, and ~i68soyuz~ is the "foreign" component of ~i68~, I named it after the Soyuz. Conveniently, this fit
+perfectly within the TI-92 Plus' 8-character restriction on filenames.
+
+~i68apollo~, the "local" component of ~i68~, was named likewise for the Apollo spacecraft flown as part of /ASTP/.
+* Footnotes
+[fn:3] Alongside ~i68apollo~, which you can find by scrounging through my GitHub.
+
+[fn:2] The other two 68k-based TI calculators with link ports.
