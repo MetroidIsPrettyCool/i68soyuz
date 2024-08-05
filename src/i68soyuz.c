@@ -13,7 +13,7 @@ INT_HANDLER save_int_5;
 INT_HANDLER save_int_6;
 
 volatile char break_key_pressed;
-unsigned char keymap[32] = {0};
+unsigned char keymap[11] = {0};
 
 DEFINE_INT_HANDLER(OnBreakKey) {
     break_key_pressed = 1;
@@ -85,7 +85,7 @@ void run(void) {
 
 void _main(void) {
     clrscr();
-    printf("i68 foreign component \"soyuz\"\n\nBuild 28\nPress any key to begin...\n");
+    printf("i68 foreign component \"soyuz\"\n\nBuild 29\nPress any key to begin...\n");
     ngetchx();
     printf("Started.\nPress ON at any time to quit.\n");
 
