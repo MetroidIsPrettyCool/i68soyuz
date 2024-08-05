@@ -12,42 +12,29 @@
 
 INT_HANDLER save_int_1;
 INT_HANDLER save_int_5;
-INT_HANDLER save_int_6;
 
 volatile char break_key_pressed;
 unsigned char keymap[11] = {0};
 
-DEFINE_INT_HANDLER(OnBreakKey) {
-    break_key_pressed = 1;
-}
-
 void setup(void) {
-    // ---------------other---------------
-
-    break_key_pressed = 0;
-
     // ---------------save the default interrupt handlers---------------
 
-    save_int_1 = GetIntVec(AUTO_INT_1);
-    save_int_5 = GetIntVec(AUTO_INT_5);
-    save_int_6 = GetIntVec(AUTO_INT_6);
-
-    // ---------------set global variables---------------
-
-    // override automatic interrupt handlers 1 (heartbeat timer/keyscan)...
-    SetIntVec(AUTO_INT_1, DUMMY_HANDLER);
-    // ..and 5 (system timer)...
-    SetIntVec(AUTO_INT_5, DUMMY_HANDLER);
-    // ...and 6 (on key)
-    SetIntVec(AUTO_INT_6, OnBreakKey);
+    save_int_1 = GetIntVec(AUTO_INT_1); // heartbeat/system timer
+    save_int_5 = GetIntVec(AUTO_INT_5); // system timer
 }
 
-void cleanup(void) {
+void disable_ints(void) {
+    // ---------------override the default interrupt handlers---------------
+
+    SetIntVec(AUTO_INT_1, DUMMY_HANDLER); // heartbeat/system timer
+    SetIntVec(AUTO_INT_5, DUMMY_HANDLER); // system timer
+}
+
+void restore_ints(void) {
     // ---------------restore the default interrupt handlers---------------
 
-    SetIntVec(AUTO_INT_1, save_int_1);
-    SetIntVec(AUTO_INT_5, save_int_5);
-    SetIntVec(AUTO_INT_6, save_int_6);
+    SetIntVec(AUTO_INT_1, save_int_1); // heartbeat/system timer
+    SetIntVec(AUTO_INT_5, save_int_5); // system timer
 }
 
 int version_check() {
@@ -71,10 +58,15 @@ int version_check() {
 void run(void) {
     while (1) {
 
+        disable_ints();
+
         for (int j = 0; j <= 9; j++) {
             keymap[j] = (unsigned char)_rowread(~((short)(1<<j)));
         }
-        keymap[10] = break_key_pressed;
+
+        restore_ints();
+
+        keymap[10] = OSCheckBreak();
 
         unsigned short send_error = LIO_SendData(keymap, sizeof(keymap));
         if (send_error) {
@@ -95,7 +87,8 @@ void _main(void) {
            SOYUZ_VER[MAJOR],
            SOYUZ_VER[MINOR],
            SOYUZ_VER[PATCH]);
-    ngetchx();
+
+    GKeyIn(NULL, GKF_NORMAL); // wait for input
 
     LIO_SendData(&READY_BYTE, sizeof(READY_BYTE));
     printf("Started.\n");
@@ -109,5 +102,5 @@ void _main(void) {
 
     setup();
     run();
-    cleanup();
+    restore_ints(); // just in case
 }
