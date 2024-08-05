@@ -8,34 +8,17 @@
 #include <stdio.h>
 #include <system.h>
 
-#define MAJOR 0
-#define MINOR 1
-#define PATCH 2
+#include "i68soyuz.h"
 
 INT_HANDLER save_int_1;
 INT_HANDLER save_int_5;
 INT_HANDLER save_int_6;
-
-const unsigned char SOYUZ_VER[3] = {0, 3, 1};
-const unsigned char READY_BYTE = 0x50;
 
 volatile char break_key_pressed;
 unsigned char keymap[11] = {0};
 
 DEFINE_INT_HANDLER(OnBreakKey) {
     break_key_pressed = 1;
-}
-
-void print_byte(unsigned char byte) {
-    printf("%d%d%d%d%d%d%d%d\n",
-           (byte >> 7 & 1),
-           (byte >> 6 & 1),
-           (byte >> 5 & 1),
-           (byte >> 4 & 1),
-           (byte >> 3 & 1),
-           (byte >> 2 & 1),
-           (byte >> 1 & 1),
-           (byte      & 1));
 }
 
 void setup(void) {
@@ -67,9 +50,25 @@ void cleanup(void) {
     SetIntVec(AUTO_INT_6, save_int_6);
 }
 
-void run(void) {
-    unsigned char tmp;
+int version_check() {
+    unsigned short send_error = LIO_SendData(SOYUZ_VER, sizeof(SOYUZ_VER));
+    if (send_error) {
+        printf("Error sending data: %d\n", send_error);
+    }
 
+    unsigned char apollo_ver[3] = {0};
+
+    unsigned short recv_error = LIO_RecvData(apollo_ver, sizeof(apollo_ver), 20); // wait 1 second/20 timer ticks
+    if (recv_error) {
+        printf("Error sending data: %d\n", send_error);
+    }
+
+    printf("apollo: %d.%d.%d\n", apollo_ver[MAJOR], apollo_ver[MINOR], apollo_ver[PATCH]);
+
+    return (apollo_ver[MAJOR] == SOYUZ_VER[MAJOR] && apollo_ver[MINOR] == SOYUZ_VER[MINOR]);
+}
+
+void run(void) {
     while (1) {
 
         for (int j = 0; j <= 9; j++) {
@@ -90,17 +89,6 @@ void run(void) {
     }
 }
 
-int version_check() {
-    LIO_SendData(SOYUZ_VER, sizeof(SOYUZ_VER));
-
-    unsigned char apollo_ver[3] = {0};
-    LIO_RecvData(apollo_ver, sizeof(apollo_ver), 20); // wait 1 second/20 timer ticks
-
-    printf("apollo: %d.%d.%d\n", apollo_ver[MAJOR], apollo_ver[MINOR], apollo_ver[PATCH]);
-
-    return (apollo_ver[MAJOR] == SOYUZ_VER[MAJOR] && apollo_ver[MINOR] == SOYUZ_VER[MINOR]);
-}
-
 void _main(void) {
     clrscr();
     printf("i68 foreign component \"soyuz\"\n\nVersion: %d.%d.%d\nStart apollo\nThen press any key\n",
@@ -116,6 +104,7 @@ void _main(void) {
         printf("verchk fail, aborting\n");
         return;
     }
+
     printf("Press ON at any time to quit.\n");
 
     setup();
