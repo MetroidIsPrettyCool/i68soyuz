@@ -85,9 +85,9 @@ void run(void) {
 
 void _main(void) {
     clrscr();
-    printf("i68soyuz\ni68 foreign component\nBuild 27\nPress any key to begin...\n");
+    printf("i68 foreign component \"soyuz\"\n\nBuild 28\nPress any key to begin...\n");
     ngetchx();
-    printf("Started. Press ON at any time to quit.\n");
+    printf("Started.\nPress ON at any time to quit.\n");
 
     setup();
     run();
