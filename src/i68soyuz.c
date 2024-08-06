@@ -8,94 +8,59 @@
 #include <stdio.h>
 #include <system.h>
 
+#include "i68s_interrupts.h"
+#include "i68s_handshake.h"
+#include "i68s_version.h"
+
 #include "i68soyuz.h"
 
-INT_HANDLER save_int_1;
-INT_HANDLER save_int_5;
-
-unsigned char keymap[10] = {0};
-unsigned char prev_keymap[10] = {0};
-
 void setup(void) {
-    // ---------------save the default interrupt handlers---------------
+    setup_ints();
 
-    save_int_1 = GetIntVec(AUTO_INT_1); // heartbeat/key scan timer
-    save_int_5 = GetIntVec(AUTO_INT_5); // system timer
+    clrscr();
 }
 
-void disable_ints(void) {
-    // ---------------override the default interrupt handlers---------------
-
-    SetIntVec(AUTO_INT_1, DUMMY_HANDLER); // heartbeat/key scan timer
-    SetIntVec(AUTO_INT_5, DUMMY_HANDLER); // system timer
-}
-
-void restore_ints(void) {
-    // ---------------restore the default interrupt handlers---------------
-
-    SetIntVec(AUTO_INT_1, save_int_1); // heartbeat/key scan timer
-    SetIntVec(AUTO_INT_5, save_int_5); // system timer
-}
-
-int version_check() {
-    unsigned short send_error = LIO_SendData(SOYUZ_VER, sizeof(SOYUZ_VER));
-    if (send_error) {
-        printf("Error sending data: %d\n", send_error);
-    }
-
-    unsigned char apollo_ver[3] = {0};
-
-    unsigned short recv_error = LIO_RecvData(apollo_ver, sizeof(apollo_ver), 20); // wait 1 second/20 timer ticks
-    if (recv_error) {
-        printf("Error sending data: %d\n", send_error);
-    }
-
-    printf("apollo: %d.%d.%d\n", apollo_ver[MAJOR], apollo_ver[MINOR], apollo_ver[PATCH]);
-
-    return (apollo_ver[MAJOR] == SOYUZ_VER[MAJOR] && apollo_ver[MINOR] == SOYUZ_VER[MINOR]);
-}
-
-void read_keymap() {
+void read_key_matrix_state(void) {
     disable_ints();
 
-    for (unsigned int i = 0; i < sizeof(keymap); i++) {
-        keymap[i] = (unsigned char)_rowread(~((short)(1<<i)));
+    for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
+        key_matrix_state[i] = (unsigned char)_rowread(~((short)(1<<i)));
     }
 
     restore_ints();
 
-    keymap[1] |= OSCheckBreak();
+    key_matrix_state[1] |= OSCheckBreak();
 }
 
 void run(void) {
-    read_keymap();
+    read_key_matrix_state();
 
     while (1) {
 
-        for (unsigned int i = 0; i < sizeof(keymap); i++) {
-            prev_keymap[i] = keymap[i];
+        for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
+            prev_key_matrix_state[i] = key_matrix_state[i];
         }
 
-        read_keymap();
+        read_key_matrix_state();
 
-        // check keymaps aren't equal
-        char keymaps_equal;
-        for (unsigned int i = 0; i < sizeof(keymap); i++) {
-            keymaps_equal = (prev_keymap[i] == keymap[i]);
-            if (!keymaps_equal) {
+        // check key_matrix_states aren't equal
+        char key_matrix_states_equal;
+        for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
+            key_matrix_states_equal = (prev_key_matrix_state[i] == key_matrix_state[i]);
+            if (!key_matrix_states_equal) {
                 break;
             }
         }
-        if (keymaps_equal) { // if nothing's changed we don't need to transmit
+        if (key_matrix_states_equal) { // if nothing's changed we don't need to transmit
             continue;
         }
 
-        unsigned short send_error = LIO_SendData(keymap, sizeof(keymap));
+        unsigned short send_error = LIO_SendData(key_matrix_state, sizeof(key_matrix_state));
         if (send_error) {
             printf("Error sending data: %d\n", send_error);
         }
 
-        if (keymap[1] & 1) {
+        if (key_matrix_state[1] & 1) {
             return;
         }
 
@@ -104,8 +69,13 @@ void run(void) {
 }
 
 void _main(void) {
-    clrscr();
-    printf("i68 foreign component \"soyuz\"\n\nVersion: %d.%d.%d\nBuilt %s %s\nStart apollo\nThen press any key\n",
+    setup();
+
+    printf("i68 foreign component \"soyuz\"\n\n"
+           "Version: %d.%d.%d\n"
+           "Built %s %s\n"
+           "Start apollo\n"
+           "Then press any key\n",
            SOYUZ_VER[MAJOR],
            SOYUZ_VER[MINOR],
            SOYUZ_VER[PATCH],
@@ -114,17 +84,46 @@ void _main(void) {
 
     GKeyIn(NULL, GKF_NORMAL); // wait for input
 
-    LIO_SendData(&READY_BYTE, sizeof(READY_BYTE));
-    printf("Started.\n");
+    printf("Handshaking...\n");
 
-    if (!version_check()) {
-        printf("verchk fail, aborting\n");
+    struct I68Config i68_config = handshake();
+    switch (i68_config.handshake_result) {
+
+    case HANDSHAKE_VERSION_MISMATCH:
+        printf("Version mismatch\n"
+               "apollo ver: %d.%d.%d\n"
+               "Aborting\n",
+               i68_config.apollo_version[MAJOR],
+               i68_config.apollo_version[MINOR],
+               i68_config.apollo_version[PATCH]);
         return;
+
+    case HANDSHAKE_WRITE_ERROR:
+        printf("Handshake write error\n"
+               "Aborting\n");
+        return;
+
+    case HANDSHAKE_READ_ERROR:
+        printf("Handshake read error\n"
+               "Aborting\n");
+        return;
+
+    default:
+        printf("Unhandled handshake error\n"
+               "Aborting\n");
+        return;
+
+    case HANDSHAKE_SUCCESS:
+        printf("Success\n"
+               "apollo ver: %d.%d.%d\n",
+               i68_config.apollo_version[MAJOR],
+               i68_config.apollo_version[MINOR],
+               i68_config.apollo_version[PATCH]);
+        break;
     }
 
     printf("Press ON at any time to quit.\n");
 
-    setup();
     run();
     restore_ints(); // just in case
 }
