@@ -21,6 +21,7 @@ void setup(void) {
 }
 
 void read_key_matrix_state(void) {
+    // read key matrix
     disable_ints();
 
     for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
@@ -29,7 +30,10 @@ void read_key_matrix_state(void) {
 
     restore_ints();
 
-    key_matrix_state[1] |= OSCheckBreak();
+    // handle "ON" key
+    OSClearBreak();
+
+    key_matrix_state[1] |= OSCheckBreak(); // row 1 bit 0 is unused, so we'll stick the break key status here
 }
 
 void run(void) {
@@ -72,10 +76,11 @@ void _main(void) {
     setup();
 
     printf("i68 foreign component \"soyuz\"\n\n"
-           "Version: %d.%d.%d\n"
-           "Built %s %s\n"
-           "Start apollo\n"
-           "Then press any key\n",
+           "Version %d.%d.%d\n"
+           "Built %s %s\n\n"
+           "Start apollo then press\n"
+           "any key to continue\n\n"
+           "Or press ON to abort\n\n",
            SOYUZ_VER[MAJOR],
            SOYUZ_VER[MINOR],
            SOYUZ_VER[PATCH],
@@ -83,6 +88,10 @@ void _main(void) {
            __TIME__);
 
     GKeyIn(NULL, GKF_NORMAL); // wait for input
+    if (OSCheckBreak()) {
+        // if key was ESC
+        return;
+    }
 
     printf("Handshaking...\n");
 
@@ -91,31 +100,35 @@ void _main(void) {
 
     case HANDSHAKE_VERSION_MISMATCH:
         printf("Version mismatch\n"
-               "apollo ver: %d.%d.%d\n"
-               "Aborting\n",
+               "apollo ver: %d.%d.%d\n\n"
+               "Press any key to exit\n",
                i68_config.apollo_version[MAJOR],
                i68_config.apollo_version[MINOR],
                i68_config.apollo_version[PATCH]);
+        GKeyIn(NULL, GKF_NORMAL); // wait for input
         return;
 
     case HANDSHAKE_WRITE_ERROR:
-        printf("Handshake write error\n"
-               "Aborting\n");
+        printf("Handshake write error\n\n"
+               "Press any key to exit\n");
+        GKeyIn(NULL, GKF_NORMAL); // wait for input
         return;
 
     case HANDSHAKE_READ_ERROR:
-        printf("Handshake read error\n"
-               "Aborting\n");
+        printf("Handshake read error\n\n"
+               "Press any key to exit\n");
+        GKeyIn(NULL, GKF_NORMAL); // wait for input
         return;
 
     default:
-        printf("Unhandled handshake error\n"
-               "Aborting\n");
+        printf("Unhandled handshake error\n\n"
+               "Press any key to exit\n");
+        GKeyIn(NULL, GKF_NORMAL); // wait for input
         return;
 
     case HANDSHAKE_SUCCESS:
-        printf("Success\n"
-               "apollo ver: %d.%d.%d\n",
+        printf("Handshake success\n\n"
+               "apollo ver: %d.%d.%d\n\n",
                i68_config.apollo_version[MAJOR],
                i68_config.apollo_version[MINOR],
                i68_config.apollo_version[PATCH]);
