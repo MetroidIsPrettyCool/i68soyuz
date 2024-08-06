@@ -14,6 +14,7 @@ INT_HANDLER save_int_1;
 INT_HANDLER save_int_5;
 
 unsigned char keymap[10] = {0};
+unsigned char prev_keymap[10] = {0};
 
 void setup(void) {
     // ---------------save the default interrupt handlers---------------
@@ -54,18 +55,40 @@ int version_check() {
     return (apollo_ver[MAJOR] == SOYUZ_VER[MAJOR] && apollo_ver[MINOR] == SOYUZ_VER[MINOR]);
 }
 
+void read_keymap() {
+    disable_ints();
+
+    for (unsigned int i = 0; i < sizeof(keymap); i++) {
+        keymap[i] = (unsigned char)_rowread(~((short)(1<<i)));
+    }
+
+    restore_ints();
+
+    keymap[1] |= OSCheckBreak();
+}
+
 void run(void) {
+    read_keymap();
+
     while (1) {
 
-        disable_ints();
-
-        for (int j = 0; j <= 9; j++) {
-            keymap[j] = (unsigned char)_rowread(~((short)(1<<j)));
+        for (unsigned int i = 0; i < sizeof(keymap); i++) {
+            prev_keymap[i] = keymap[i];
         }
 
-        restore_ints();
+        read_keymap();
 
-        keymap[1] += OSCheckBreak();
+        // check keymaps aren't equal
+        char keymaps_equal;
+        for (unsigned int i = 0; i < sizeof(keymap); i++) {
+            keymaps_equal = (prev_keymap[i] == keymap[i]);
+            if (!keymaps_equal) {
+                break;
+            }
+        }
+        if (keymaps_equal) { // if nothing's changed we don't need to transmit
+            continue;
+        }
 
         unsigned short send_error = LIO_SendData(keymap, sizeof(keymap));
         if (send_error) {
@@ -82,10 +105,12 @@ void run(void) {
 
 void _main(void) {
     clrscr();
-    printf("i68 foreign component \"soyuz\"\n\nVersion: %d.%d.%d\nStart apollo\nThen press any key\n",
+    printf("i68 foreign component \"soyuz\"\n\nVersion: %d.%d.%d\nBuilt %s %s\nStart apollo\nThen press any key\n",
            SOYUZ_VER[MAJOR],
            SOYUZ_VER[MINOR],
-           SOYUZ_VER[PATCH]);
+           SOYUZ_VER[PATCH],
+           __DATE__,
+           __TIME__);
 
     GKeyIn(NULL, GKF_NORMAL); // wait for input
 
