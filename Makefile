@@ -11,10 +11,13 @@ HFILES=$(addprefix $(SRCDIR),$(addsuffix .h,$(HFILENAMES)))
 
 .PHONY: clean all
 
-all: ./bin/i68soyuz.9xz
+all: ./bin/i68soyuz.9xz ./bin/i68soyuz.89z
 
 ./bin/i68soyuz.9xz: $(CFILES) $(HFILES) $(SRCDIR)i68s_ti92p_native.h
-	$(CC) $(CFLAGS) -I$(SRCDIR)92p -DUSE_TI92PLUS -o $@ $(CFILES)
+	$(CC) $(CFLAGS) -DUSE_TI92PLUS -o $@ $(CFILES)
+
+./bin/i68soyuz.89z: $(CFILES) $(HFILES) $(SRCDIR)i68s_ti89_native.h
+	$(CC) $(CFLAGS) -DUSE_TI89 -o $@ $(CFILES)
 
 clean:
-	rm ./bin/i68soyuz.9xz
+	rm ./bin/i68soyuz.9xz ./bin/i68soyuz.89z

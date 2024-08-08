@@ -97,7 +97,7 @@ void _main(void) {
 
     GKeyIn(NULL, GKF_NORMAL); // wait for input
     if (OSCheckBreak()) {
-        // if key was ESC
+        cleanup();
         return;
     }
 
