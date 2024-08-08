@@ -22,18 +22,16 @@ void setup(void) {
 
 void read_key_matrix_state(void) {
     // read key matrix
-    disable_ints();
+    disable_ints15();
 
     for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
         key_matrix_state[i] = (unsigned char)_rowread(~((short)(1<<i)));
     }
 
-    restore_ints();
+    restore_ints15();
 
     // handle "ON" key
-    OSClearBreak();
-
-    key_matrix_state[1] |= OSCheckBreak(); // row 1 bit 0 is unused, so we'll stick the break key status here
+    key_matrix_state[1] |= read_break_key(); // row 1 bit 0 is unused, so we'll stick the break key status here
 }
 
 void run(void) {
@@ -138,5 +136,6 @@ void _main(void) {
     printf("Press ON at any time to quit.\n");
 
     run();
-    restore_ints(); // just in case
+
+    cleanup_ints();
 }
