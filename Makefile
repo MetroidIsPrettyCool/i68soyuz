@@ -9,7 +9,9 @@ HFILENAMES=i68soyuz i68s_interrupts i68s_handshake i68s_version i68s_compat
 CFILES=$(addprefix $(SRCDIR),$(addsuffix .c,$(CFILENAMES)))
 HFILES=$(addprefix $(SRCDIR),$(addsuffix .h,$(HFILENAMES)))
 
-.PHONY: clean
+.PHONY: clean all
+
+all: ./bin/i68soyuz.9xz
 
 ./bin/i68soyuz.9xz: $(CFILES) $(HFILES) $(SRCDIR)i68s_ti92p_native.h
 	$(CC) $(CFLAGS) -I$(SRCDIR)92p -DUSE_TI92PLUS -o $@ $(CFILES)
