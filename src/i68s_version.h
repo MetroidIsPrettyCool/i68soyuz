@@ -5,6 +5,6 @@
 #define MINOR 1
 #define PATCH 2
 
-const unsigned char SOYUZ_VER[3] = {0, 4, 3};
+const unsigned char SOYUZ_VER[3] = {0, 4, 4};
 
 #endif
