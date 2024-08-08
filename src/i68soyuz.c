@@ -1,7 +1,5 @@
 #define SAVE_SCREEN
 
-#define USE_TI92PLUS
-
 #include <intr.h>
 #include <kbd.h>
 #include <link.h>
@@ -12,6 +10,9 @@
 #include "i68s_handshake.h"
 #include "i68s_version.h"
 
+// header file containing platform-specific definitions
+#include "i68s_compat.h"
+
 #include "i68soyuz.h"
 
 void setup(void) {
@@ -19,6 +20,9 @@ void setup(void) {
 
     clrscr();
 }
+
+unsigned char key_matrix_state[KEY_MATRIX_HEIGHT];
+unsigned char prev_key_matrix_state[KEY_MATRIX_HEIGHT];
 
 void read_key_matrix_state(void) {
     // read key matrix
@@ -31,7 +35,7 @@ void read_key_matrix_state(void) {
     restore_ints15();
 
     // handle "ON" key
-    key_matrix_state[1] |= read_break_key(); // row 1 bit 0 is unused, so we'll stick the break key status here
+    key_matrix_state[BREAK_KEY_ROW] |= read_break_key(); // row 1 bit 0 is unused, so we'll stick the break key status here
 }
 
 void run(void) {

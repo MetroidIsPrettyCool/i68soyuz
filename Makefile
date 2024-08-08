@@ -1,14 +1,18 @@
 CC=tigcc
-CFLAGS=-std=c99 -O2 -Wall -Wextra -I.
+CFLAGS=-std=c99 -O2 -Wall -Wextra
 
 SRCDIR=./src/
-CFILES=$(SRCDIR)i68soyuz.c $(SRCDIR)i68s_interrupts.c $(SRCDIR)i68s_handshake.c
-HFILES=$(SRCDIR)i68soyuz.h $(SRCDIR)i68s_interrupts.h $(SRCDIR)i68s_handshake.h
+
+CFILENAMES=i68soyuz i68s_interrupts i68s_handshake
+HFILENAMES=i68soyuz i68s_interrupts i68s_handshake i68s_version i68s_compat
+
+CFILES=$(addprefix $(SRCDIR),$(addsuffix .c,$(CFILENAMES)))
+HFILES=$(addprefix $(SRCDIR),$(addsuffix .h,$(HFILENAMES)))
 
 .PHONY: clean
 
-./bin/i68soyuz.9xz: $(CFILES) $(HFILES)
-	$(CC) $(CFLAGS) -o $@ $(CFILES)
+./bin/i68soyuz.9xz: $(CFILES) $(HFILES) $(SRCDIR)i68s_ti92p_native.h
+	$(CC) $(CFLAGS) -I$(SRCDIR)92p -DUSE_TI92PLUS -o $@ $(CFILES)
 
 clean:
 	rm ./bin/i68soyuz.9xz

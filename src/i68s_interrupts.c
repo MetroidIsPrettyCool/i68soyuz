@@ -1,5 +1,7 @@
 #include <intr.h>
 
+#include "i68s_compat.h"
+
 #include "i68s_interrupts.h"
 
 INT_HANDLER default_int_1; // heartbeat/key scan timer
@@ -9,7 +11,7 @@ INT_HANDLER default_int_6; // on/break key pressed
 volatile char break_key_pressed;
 
 DEFINE_INT_HANDLER(OnBreakKey) {
-    break_key_pressed = 1;
+    break_key_pressed = 1 << BREAK_KEY_COL;
 
     ExecuteHandler(default_int_6);
 }
