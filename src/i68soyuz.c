@@ -21,6 +21,12 @@ void setup(void) {
     clrscr();
 }
 
+void cleanup(void) {
+    cleanup_ints();
+
+    GKeyFlush();
+}
+
 unsigned char key_matrix_state[KEY_MATRIX_HEIGHT];
 unsigned char prev_key_matrix_state[KEY_MATRIX_HEIGHT];
 
@@ -141,5 +147,5 @@ void _main(void) {
 
     run();
 
-    cleanup_ints();
+    cleanup();
 }
