@@ -1,5 +1,5 @@
-#ifndef I68S_VERSION
-#define I68S_VERSION
+#ifndef I68S_VERSION_H
+#define I68S_VERSION_H
 
 #define MAJOR 0
 #define MINOR 1

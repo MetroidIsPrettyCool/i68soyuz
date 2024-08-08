@@ -1,5 +1,5 @@
-#ifndef I68S_INTERRUPTS
-#define I68S_INTERRUPTS
+#ifndef I68S_INTERRUPTS_H
+#define I68S_INTERRUPTS_H
 
 // save default interrupt handlers for later
 void setup_ints(void);

@@ -1,5 +1,5 @@
-#ifndef I68S_HANDSHAKE
-#define I68S_HANDSHAKE
+#ifndef I68S_HANDSHAKE_H
+#define I68S_HANDSHAKE_H
 
 enum HandshakeResult {
     HANDSHAKE_SUCCESS,
