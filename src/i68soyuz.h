@@ -10,7 +10,10 @@ void cleanup(void);
 // read key matrix state into global variable ~key_matrix_state~
 void read_key_matrix_state(void);
 
-// primary logic
+// primary logic, needs be between setup and cleanup
 void run(void);
+
+// read key matrix over and over and over again, and send it over the link port
+void keymatrix_loop(void);
 
 #endif

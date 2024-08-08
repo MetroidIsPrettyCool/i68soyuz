@@ -27,68 +27,13 @@ void cleanup(void) {
     GKeyFlush();
 }
 
-unsigned char key_matrix_state[KEY_MATRIX_HEIGHT];
-unsigned char prev_key_matrix_state[KEY_MATRIX_HEIGHT];
-
-void read_key_matrix_state(void) {
-    // read key matrix
-    disable_ints15();
-
-    for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
-        key_matrix_state[i] = (unsigned char)_rowread(~((short)(1<<i)));
-    }
-
-    restore_ints15();
-
-    // handle "ON" key
-    key_matrix_state[BREAK_KEY_ROW] |= read_break_key(); // row 1 bit 0 is unused, so we'll stick the break key status here
-}
-
 void run(void) {
-    read_key_matrix_state();
-
-    while (1) {
-
-        for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
-            prev_key_matrix_state[i] = key_matrix_state[i];
-        }
-
-        read_key_matrix_state();
-
-        // check key_matrix_states aren't equal
-        char key_matrix_states_equal;
-        for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
-            key_matrix_states_equal = (prev_key_matrix_state[i] == key_matrix_state[i]);
-            if (!key_matrix_states_equal) {
-                break;
-            }
-        }
-        if (key_matrix_states_equal) { // if nothing's changed we don't need to transmit
-            continue;
-        }
-
-        unsigned short send_error = LIO_SendData(key_matrix_state, sizeof(key_matrix_state));
-        if (send_error) {
-            printf("Error sending data: %d\n", send_error);
-        }
-
-        if (key_matrix_state[1] & 1) {
-            return;
-        }
-
-        idle();
-    }
-}
-
-void _main(void) {
-    setup();
-
-    printf("i68 foreign component \"soyuz\"\n\n"
+    printf("i68 foreign component\n\"soyuz\"\n\n"
            "Version %d.%d.%d\n"
            "Built %s %s\n\n"
            "Start apollo then press\n"
            "any key to continue\n\n"
-           "Or press ON to abort\n\n",
+           "Or press ON to abort\n",
            SOYUZ_VER[MAJOR],
            SOYUZ_VER[MINOR],
            SOYUZ_VER[PATCH],
@@ -97,11 +42,10 @@ void _main(void) {
 
     GKeyIn(NULL, GKF_NORMAL); // wait for input
     if (OSCheckBreak()) {
-        cleanup();
         return;
     }
 
-    printf("Handshaking...\n");
+    printf("\nHandshaking...\n");
 
     struct I68Config i68_config = handshake();
     switch (i68_config.handshake_result) {
@@ -144,6 +88,65 @@ void _main(void) {
     }
 
     printf("Press ON at any time to quit.\n");
+
+    keymatrix_loop();
+}
+
+unsigned char key_matrix_state[KEY_MATRIX_HEIGHT];
+unsigned char prev_key_matrix_state[KEY_MATRIX_HEIGHT];
+
+void read_key_matrix_state(void) {
+    // read key matrix
+    disable_ints15();
+
+    for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
+        key_matrix_state[i] = (unsigned char)_rowread(~((short)(1<<i)));
+    }
+
+    restore_ints15();
+
+    // handle "ON" key
+    key_matrix_state[BREAK_KEY_ROW] |= read_break_key(); // row 1 bit 0 is unused, so we'll stick the break key status here
+}
+
+void keymatrix_loop(void) {
+    read_key_matrix_state();
+
+    while (1) {
+
+        for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
+            prev_key_matrix_state[i] = key_matrix_state[i];
+        }
+
+        read_key_matrix_state();
+
+        // check key_matrix_states aren't equal
+        char key_matrix_states_equal;
+        for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
+            key_matrix_states_equal = (prev_key_matrix_state[i] == key_matrix_state[i]);
+            if (!key_matrix_states_equal) {
+                break;
+            }
+        }
+        if (key_matrix_states_equal) { // if nothing's changed we don't need to transmit
+            continue;
+        }
+
+        unsigned short send_error = LIO_SendData(key_matrix_state, sizeof(key_matrix_state));
+        if (send_error) {
+            printf("Error sending data: %d\n", send_error);
+        }
+
+        if (key_matrix_state[BREAK_KEY_ROW] & (1 << BREAK_KEY_COL)) {
+            return;
+        }
+
+        idle();
+    }
+}
+
+void _main(void) {
+    setup();
 
     run();
 
