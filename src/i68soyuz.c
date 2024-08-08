@@ -87,7 +87,7 @@ void run(void) {
         break;
     }
 
-    printf("Press ON at any time to quit.\n");
+    printf("Press ON at any time\nto quit\n");
 
     keymatrix_loop();
 }
