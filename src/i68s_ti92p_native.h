@@ -8,7 +8,7 @@
 #define BREAK_KEY_COL 0
 
 // If I ever add support for the original TI-92, it'll be ID 92. The TI-92 II, which I will almost certainly never own,
-// would be ID 93. The TI-92 Plus HW 1 would be ID 94.
-const unsigned char MACHINE_ID = 95;
+// would be ID 93.
+const unsigned char MACHINE_ID = 192;
 
 #endif
