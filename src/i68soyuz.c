@@ -1,5 +1,3 @@
-#define SAVE_SCREEN
-
 #include <intr.h>
 #include <kbd.h>
 #include <link.h>
