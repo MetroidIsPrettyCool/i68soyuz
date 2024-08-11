@@ -13,15 +13,15 @@
 
 #endif
 
-#ifdef USE_TI89
+/* #ifdef USE_TI89 */
 
-#define KEY_MATRIX_HEIGHT 7
+/* #define KEY_MATRIX_HEIGHT 7 */
 
-// Row and Column of an empty slot in the key matrix where we'll stuff the break key state
-#define BREAK_KEY_ROW 6
-#define BREAK_KEY_COL 7
+/* // Row and Column of an empty slot in the key matrix where we'll stuff the break key state */
+/* #define BREAK_KEY_ROW 6 */
+/* #define BREAK_KEY_COL 7 */
 
-#endif
+/* #endif */
 
 unsigned char key_matrix_state[KEY_MATRIX_HEIGHT];
 unsigned char prev_key_matrix_state[KEY_MATRIX_HEIGHT];

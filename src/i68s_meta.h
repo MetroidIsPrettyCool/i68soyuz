@@ -9,11 +9,11 @@ const unsigned char MACHINE_ID = 192;
 
 #endif
 
-#ifdef USE_TI89
+/* #ifdef USE_TI89 */
 
-const unsigned char MACHINE_ID = 89;
+/* const unsigned char MACHINE_ID = 89; */
 
-#endif
+/* #endif */
 
 #define MAJOR 0
 #define MINOR 1
