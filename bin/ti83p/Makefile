@@ -27,4 +27,4 @@ i68s_z80_link.o: i68s_sys_link.h i68s_z80_link.h
 i68s_z80_setup_cleanup.o: i68s_sys_setup_cleanup.h
 
 clean:
-	rm -f $(OUTFILE) $(OBJFILES)
+	rm -f i68soyuz.8xp i68soyuz $(OBJFILES)

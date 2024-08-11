@@ -14,3 +14,4 @@ ti83p:
 clean:
 	$(MAKE) -C bin/ti92p clean
 	$(MAKE) -C bin/ti89 clean
+	$(MAKE) -C bin/ti83p clean
