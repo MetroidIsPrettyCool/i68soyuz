@@ -1,8 +1,11 @@
+#include <kbd.h>
 #include <intr.h>
 
 #include "i68s_sys_break.h"
-#include "i68s_sys_interrupts.h"
+#include "i68s_sys_input.h"
 #include "i68s_sys_matrix.h"
+#include "i68s_sys_setup_cleanup.h"
+#include "i68s_sys_output.h"
 
 INT_HANDLER default_int_1; // heartbeat/key scan timer
 INT_HANDLER default_int_5; // system timer
@@ -16,7 +19,7 @@ DEFINE_INT_HANDLER(OnBreakKey) {
     // ExecuteHandler(default_int_6);
 }
 
-void i68s_sys_setup_interrupts(void) {
+static void setup_interrupts(void) {
     // save the default interrupt handlers
     default_int_1 = GetIntVec(AUTO_INT_1);
     default_int_5 = GetIntVec(AUTO_INT_5);
@@ -30,26 +33,50 @@ void i68s_sys_setup_interrupts(void) {
     break_key_pressed = 0;
 }
 
-void i68s_sys_disable_keyboard_interrupts(void) {
+static void disable_keyboard_interrupts(void) {
     // override the default interrupt handlers
     SetIntVec(AUTO_INT_1, DUMMY_HANDLER);
     SetIntVec(AUTO_INT_5, DUMMY_HANDLER);
 }
 
-void i68s_sys_restore_keyboard_interrupts(void) {
+static void restore_keyboard_interrupts(void) {
     // restore the default interrupt handlers
     SetIntVec(AUTO_INT_1, default_int_1);
     SetIntVec(AUTO_INT_5, default_int_5);
 }
 
-void i68s_sys_restore_all_interrupts(void) {
+static void restore_all_interrupts(void) {
     // restore the default interrupt handlers
-    i68s_sys_restore_keyboard_interrupts();
+    restore_keyboard_interrupts();
     SetIntVec(AUTO_INT_6, default_int_6);
+}
+
+void i68_sys_setup(void) {
+    setup_interrupts();
+
+    i68s_sys_clear_screen();
+}
+
+void i68_sys_cleanup(void) {
+    restore_all_interrupts();
+
+    i68s_sys_clear_keys();
 }
 
 char i68s_sys_break_key(void) {
     char result = break_key_pressed;
     break_key_pressed = 0;
+    return result;
+}
+
+unsigned char i68s_sys_read_matrix(unsigned char i) {
+    static unsigned char result;
+
+    disable_keyboard_interrupts();
+
+    result = (unsigned char)_rowread_inverted(((short)(1<<i)));
+
+    restore_keyboard_interrupts();
+
     return result;
 }

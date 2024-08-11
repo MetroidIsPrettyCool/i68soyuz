@@ -1,11 +1,11 @@
 #include "i68s_sys_break.h"
 #include "i68s_sys_idle.h"
 #include "i68s_sys_input.h"
-#include "i68s_sys_interrupts.h"
 #include "i68s_sys_link.h"
 #include "i68s_sys_matrix.h"
 #include "i68s_sys_other.h"
 #include "i68s_sys_output.h"
+#include "i68s_sys_setup_cleanup.h"
 
 #include "i68s_handshake.h"
 #include "i68s_read_kbd.h"
@@ -13,18 +13,6 @@
 #include "i68s_version.h"
 
 #include "i68soyuz.h"
-
-void setup(void) {
-    i68s_sys_setup_interrupts();
-
-    i68s_sys_clear_screen();
-}
-
-void cleanup(void) {
-    i68s_sys_restore_all_interrupts();
-
-    i68s_sys_clear_keys();
-}
 
 void run(void) {
     printf("i68 foreign component\n\"soyuz\"\n\n"
@@ -128,9 +116,9 @@ void keymatrix_loop(void) {
 }
 
 void main(void) {
-    setup();
+    i68_sys_setup();
 
     run();
 
-    cleanup();
+    i68_sys_cleanup();
 }

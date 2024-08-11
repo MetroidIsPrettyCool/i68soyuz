@@ -5,9 +5,7 @@
 
 #if defined(USE_TI92PLUS) || defined(USE_TI89)
 
-#include <kbd.h>
-
-#define i68s_sys_read_matrix _rowread
+unsigned char i68s_sys_read_matrix(unsigned char);
 
 #endif
 
