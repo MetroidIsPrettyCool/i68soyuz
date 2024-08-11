@@ -1,5 +1,4 @@
 #include <link.h>
-#include <stdio.h>
 
 #include "i68s_meta.h"
 

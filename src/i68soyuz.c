@@ -1,4 +1,3 @@
-#include <intr.h>
 #include <kbd.h>
 #include <link.h>
 #include <stdio.h>
