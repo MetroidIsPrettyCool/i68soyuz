@@ -4,6 +4,7 @@
 #include "i68s_sys_interrupts.h"
 #include "i68s_sys_link.h"
 #include "i68s_sys_matrix.h"
+#include "i68s_sys_other.h"
 #include "i68s_sys_output.h"
 
 #include "i68s_handshake.h"
@@ -126,7 +127,7 @@ void keymatrix_loop(void) {
     }
 }
 
-void _main(void) {
+void main(void) {
     setup();
 
     run();
