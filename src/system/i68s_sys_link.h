@@ -14,4 +14,11 @@
 
 #endif
 
+#if defined(__TI83p__)
+
+unsigned short i68s_sys_send_bytes(const void* src, unsigned short size);
+unsigned short i68s_sys_receive_bytes(void* dest, unsigned short size, unsigned short WaitDelay); // WaitDelay is unused
+
+#endif
+
 #endif

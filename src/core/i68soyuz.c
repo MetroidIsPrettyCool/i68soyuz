@@ -14,8 +14,10 @@
 
 #include "i68soyuz.h"
 
+const unsigned char SOYUZ_VER[3] = {0, 5, 0};
+
 void run(void) {
-    printf("i68 foreign component\n\"soyuz\"\n\n"
+    i68s_sys_printf("i68 foreign component\n\"soyuz\"\n\n"
            "Version %d.%d.%d\n"
            "Built %s %s\n\n"
            "Start apollo then press\n"
@@ -32,49 +34,49 @@ void run(void) {
         return;
     }
 
-    printf("\nHandshaking...\n");
+    i68s_sys_printf("\nHandshaking...\n");
 
-    struct I68Config i68_config = handshake();
-    switch (i68_config.handshake_result) {
+    struct I68Config* i68_config = handshake();
+    switch (i68_config->handshake_result) {
 
     case HANDSHAKE_VERSION_MISMATCH:
-        printf("Version mismatch\n"
+        i68s_sys_printf("Version mismatch\n"
                "apollo ver: %d.%d.%d\n\n"
                "Press any key to exit\n",
-               i68_config.apollo_version[MAJOR],
-               i68_config.apollo_version[MINOR],
-               i68_config.apollo_version[PATCH]);
+               i68_config->apollo_version[MAJOR],
+               i68_config->apollo_version[MINOR],
+               i68_config->apollo_version[PATCH]);
         i68s_sys_wait_for_input(); // wait for input
         return;
 
     case HANDSHAKE_WRITE_ERROR:
-        printf("Handshake write error\n\n"
+        i68s_sys_printf("Handshake write error\n\n"
                "Press any key to exit\n");
         i68s_sys_wait_for_input(); // wait for input
         return;
 
     case HANDSHAKE_READ_ERROR:
-        printf("Handshake read error\n\n"
+        i68s_sys_printf("Handshake read error\n\n"
                "Press any key to exit\n");
         i68s_sys_wait_for_input(); // wait for input
         return;
 
     default:
-        printf("Unhandled handshake error\n\n"
+        i68s_sys_printf("Unhandled handshake error\n\n"
                "Press any key to exit\n");
         i68s_sys_wait_for_input(); // wait for input
         return;
 
     case HANDSHAKE_SUCCESS:
-        printf("Handshake success\n\n"
+        i68s_sys_printf("Handshake success\n\n"
                "apollo ver: %d.%d.%d\n\n",
-               i68_config.apollo_version[MAJOR],
-               i68_config.apollo_version[MINOR],
-               i68_config.apollo_version[PATCH]);
+               i68_config->apollo_version[MAJOR],
+               i68_config->apollo_version[MINOR],
+               i68_config->apollo_version[PATCH]);
         break;
     }
 
-    printf("Press ON at any time\nto quit\n");
+    i68s_sys_printf("Press ON at any time\nto quit\n");
 
     keymatrix_loop();
 }
@@ -104,7 +106,7 @@ void keymatrix_loop(void) {
 
         unsigned short send_error = i68s_sys_send_bytes(key_matrix_state, sizeof(key_matrix_state));
         if (send_error) {
-            printf("Error sending data: %d\n", send_error);
+            i68s_sys_printf("Error sending data: %d\n", send_error);
         }
 
         if (key_matrix_state[BREAK_KEY_ROW] & (1 << BREAK_KEY_COL)) {

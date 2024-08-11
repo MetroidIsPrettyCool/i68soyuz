@@ -26,6 +26,6 @@ struct I68Config {
 // if handshake_result is HANDSHAKE_VERSION_MISMATCH, only apollo_version will be initialized
 //
 // if handshake_result is any other value, no other fields will be initialized
-struct I68Config handshake(void);
+struct I68Config* handshake(void);
 
 #endif

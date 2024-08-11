@@ -14,4 +14,12 @@
 
 #endif
 
+#if defined(__TI83p__)
+
+#include <stdio.h>
+
+#define i68s_sys_wait_for_input getk
+
+#endif
+
 #endif

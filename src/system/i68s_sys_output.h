@@ -14,4 +14,13 @@
 
 #endif
 
+#if defined(__TI83p__)
+
+#include <stdio.h>
+
+#define i68s_sys_clear_screen clrscr
+#define i68s_sys_printf printk
+
+#endif
+
 #endif

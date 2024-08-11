@@ -17,4 +17,10 @@ const unsigned char MACHINE_ID = 89;
 
 #endif
 
+#ifdef __TI83p__
+
+const unsigned char MACHINE_ID = 183;
+
+#endif
+
 #endif

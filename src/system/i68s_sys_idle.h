@@ -11,4 +11,10 @@
 
 #endif
 
+#if defined(__TI83p__)
+
+#define i68s_sys_idle() __asm__("halt")
+
+#endif
+
 #endif
