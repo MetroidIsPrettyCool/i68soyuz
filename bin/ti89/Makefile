@@ -1,11 +1,4 @@
-VPATH = ../../src/core ../../src/system ../../src/68k
-CC = tigcc
-CFLAGS = -std=c99 -O2 -Wall -Wextra -I../../src/system -DSAVE_SCREEN -DUSE_TI89
+CFLAGS = -DUSE_TI89
+OUTFILE = i68soyuz.89z
 
-.PHONY: clean
-
-i68soyuz.89z: i68soyuz.o i68s_handshake.o i68s_read_kbd.o i68s_68k_interrupts.o
-	$(CC) $(CFLAGS) -o $@ $^
-
-clean:
-	rm i68soyuz.89z *.o
+include ../../makefiles/68k.mk
