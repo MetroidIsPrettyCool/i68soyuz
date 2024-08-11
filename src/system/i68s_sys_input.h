@@ -5,7 +5,7 @@
 #ifndef I68S_SYS_INPUT_H
 #define I68S_SYS_INPUT_H
 
-#if defined(USE_TI92PLUS)
+#if defined(USE_TI92PLUS) || defined(USE_TI89)
 
 #include <kbd.h>
 

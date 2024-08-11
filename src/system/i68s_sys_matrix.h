@@ -3,7 +3,7 @@
 #ifndef I68S_SYS_MATRIX_H
 #define I68S_SYS_MATRIX_H
 
-#if defined(USE_TI92PLUS)
+#if defined(USE_TI92PLUS) || defined(USE_TI89)
 
 #include <kbd.h>
 
@@ -21,14 +21,14 @@
 
 #endif
 
-/* #ifdef USE_TI89 */
+#ifdef USE_TI89
 
-/* #define KEY_MATRIX_HEIGHT 7 */
+#define KEY_MATRIX_HEIGHT 7
 
-/* // Row and Column of an empty slot in the key matrix where we'll stuff the break key state */
-/* #define BREAK_KEY_ROW 6 */
-/* #define BREAK_KEY_COL 7 */
+// Row and Column of an empty slot in the key matrix where we'll stuff the break key state
+#define BREAK_KEY_ROW 6
+#define BREAK_KEY_COL 7
 
-/* #endif */
+#endif
 
 #endif

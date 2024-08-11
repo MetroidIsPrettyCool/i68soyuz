@@ -3,7 +3,7 @@
 #ifndef I68S_SYS_IDLE_H
 #define I68S_SYS_IDLE_H
 
-#if defined(USE_TI92PLUS)
+#if defined(USE_TI92PLUS) || defined(USE_TI89)
 
 #include <system.h>
 
