@@ -9,8 +9,8 @@
 
 #include <stdio.h>
 
-#define i68_sys_clear_screen clrscr
-#define i68_sys_printf printf
+#define i68s_sys_clear_screen clrscr
+#define i68s_sys_printf printf
 
 #endif
 

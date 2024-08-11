@@ -1,8 +1,6 @@
 #ifndef I68S_READ_KDB_H
 #define I68S_READ_KDB_H
 
-#include <kbd.h>
-
 #ifdef USE_TI92PLUS
 
 #define KEY_MATRIX_HEIGHT 10

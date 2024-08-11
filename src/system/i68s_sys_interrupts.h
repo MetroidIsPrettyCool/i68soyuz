@@ -9,8 +9,8 @@
 
 #include <intr.h>
 
-#define i68_sys_get_interrupt_vector GetIntVec
-#define i68_sys_set_interrupt_vector SetIntVec
+#define i68s_sys_get_interrupt_vector GetIntVec
+#define i68s_sys_set_interrupt_vector SetIntVec
 
 #endif
 

@@ -7,7 +7,7 @@
 
 #include <system.h>
 
-#define i68_sys_idle idle
+#define i68s_sys_idle idle
 
 #endif
 

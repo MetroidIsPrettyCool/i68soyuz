@@ -7,7 +7,7 @@
 
 #include <kbd.h>
 
-#define i68_sys_read_matrix _rowread
+#define i68s_sys_read_matrix _rowread
 
 #endif
 

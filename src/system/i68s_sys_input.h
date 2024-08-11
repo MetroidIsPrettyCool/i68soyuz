@@ -9,8 +9,8 @@
 
 #include <kbd.h>
 
-#define i68_sys_clear_keys GKeyFlush
-#define i68_sys_wait_for_input() GKeyIn(NULL, GKF_NORMAL)
+#define i68s_sys_clear_keys GKeyFlush
+#define i68s_sys_wait_for_input() GKeyIn(NULL, GKF_NORMAL)
 
 #endif
 

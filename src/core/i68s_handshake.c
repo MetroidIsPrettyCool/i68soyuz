@@ -1,4 +1,4 @@
-#include <link.h>
+#include "i68s_sys_link.h"
 
 #include "i68s_meta.h"
 
@@ -10,19 +10,19 @@ struct I68Config handshake(void) {
     struct I68Config i68_config;
     unsigned short link_error;
 
-    link_error = LIO_SendData(&READY_BYTE, sizeof(READY_BYTE));
+    link_error = i68s_sys_send_bytes(&READY_BYTE, sizeof(READY_BYTE));
     if (link_error) {
         i68_config.handshake_result = HANDSHAKE_WRITE_ERROR;
         return i68_config;
     }
 
-    link_error = LIO_SendData(SOYUZ_VER, sizeof(SOYUZ_VER));
+    link_error = i68s_sys_send_bytes(SOYUZ_VER, sizeof(SOYUZ_VER));
     if (link_error) {
         i68_config.handshake_result = HANDSHAKE_WRITE_ERROR;
         return i68_config;
     }
 
-    link_error = LIO_RecvData(i68_config.apollo_version, sizeof(i68_config.apollo_version), 20); // timeout of 1 second/20 timer ticks
+    link_error = i68s_sys_receive_bytes(i68_config.apollo_version, sizeof(i68_config.apollo_version), 20); // timeout of 1 second/20 timer ticks
     if (link_error) {
         i68_config.handshake_result = HANDSHAKE_READ_ERROR;
         return i68_config;
@@ -37,7 +37,7 @@ struct I68Config handshake(void) {
 
     // transmit machine ID
 
-    link_error = LIO_SendData(&MACHINE_ID, sizeof(MACHINE_ID));
+    link_error = i68s_sys_send_bytes(&MACHINE_ID, sizeof(MACHINE_ID));
     if (link_error) {
         i68_config.handshake_result = HANDSHAKE_WRITE_ERROR;
         return i68_config;

@@ -1,7 +1,9 @@
-#include <kbd.h>
-#include <link.h>
-#include <stdio.h>
-#include <system.h>
+#include "i68s_sys_break.h"
+#include "i68s_sys_idle.h"
+#include "i68s_sys_input.h"
+#include "i68s_sys_link.h"
+#include "i68s_sys_matrix.h"
+#include "i68s_sys_output.h"
 
 #include "i68s_interrupts.h"
 #include "i68s_handshake.h"
@@ -14,13 +16,13 @@
 void setup(void) {
     setup_ints();
 
-    clrscr();
+    i68s_sys_clear_screen();
 }
 
 void cleanup(void) {
     cleanup_ints();
 
-    GKeyFlush();
+    i68s_sys_clear_keys();
 }
 
 void run(void) {
@@ -36,7 +38,7 @@ void run(void) {
            __DATE__,
            __TIME__);
 
-    GKeyIn(NULL, GKF_NORMAL); // wait for input
+    i68s_sys_wait_for_input(); // wait for input
     if (OSCheckBreak()) {
         return;
     }
@@ -53,25 +55,25 @@ void run(void) {
                i68_config.apollo_version[MAJOR],
                i68_config.apollo_version[MINOR],
                i68_config.apollo_version[PATCH]);
-        GKeyIn(NULL, GKF_NORMAL); // wait for input
+        i68s_sys_wait_for_input(); // wait for input
         return;
 
     case HANDSHAKE_WRITE_ERROR:
         printf("Handshake write error\n\n"
                "Press any key to exit\n");
-        GKeyIn(NULL, GKF_NORMAL); // wait for input
+        i68s_sys_wait_for_input(); // wait for input
         return;
 
     case HANDSHAKE_READ_ERROR:
         printf("Handshake read error\n\n"
                "Press any key to exit\n");
-        GKeyIn(NULL, GKF_NORMAL); // wait for input
+        i68s_sys_wait_for_input(); // wait for input
         return;
 
     default:
         printf("Unhandled handshake error\n\n"
                "Press any key to exit\n");
-        GKeyIn(NULL, GKF_NORMAL); // wait for input
+        i68s_sys_wait_for_input(); // wait for input
         return;
 
     case HANDSHAKE_SUCCESS:
@@ -111,7 +113,7 @@ void keymatrix_loop(void) {
             continue;
         }
 
-        unsigned short send_error = LIO_SendData(key_matrix_state, sizeof(key_matrix_state));
+        unsigned short send_error = i68s_sys_send_bytes(key_matrix_state, sizeof(key_matrix_state));
         if (send_error) {
             printf("Error sending data: %d\n", send_error);
         }
@@ -120,7 +122,7 @@ void keymatrix_loop(void) {
             return;
         }
 
-        idle();
+        i68s_sys_idle();
     }
 }
 
