@@ -3,8 +3,8 @@ CFLAGS=-std=c99 -O2 -Wall -Wextra
 
 SRCDIR=./src/
 
-CFILENAMES=i68soyuz i68s_interrupts i68s_handshake
-HFILENAMES=i68soyuz i68s_interrupts i68s_handshake i68s_meta
+CFILENAMES=i68soyuz i68s_interrupts i68s_handshake i68s_read_kbd
+HFILENAMES=i68soyuz i68s_interrupts i68s_handshake i68s_read_kbd i68s_meta
 
 CFILES=$(addprefix $(SRCDIR),$(addsuffix .c,$(CFILENAMES)))
 HFILES=$(addprefix $(SRCDIR),$(addsuffix .h,$(HFILENAMES)))

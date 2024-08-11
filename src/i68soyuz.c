@@ -8,6 +8,7 @@
 
 #include "i68s_interrupts.h"
 #include "i68s_handshake.h"
+#include "i68s_read_kbd.h"
 
 #include "i68s_meta.h"
 
@@ -88,23 +89,6 @@ void run(void) {
     printf("Press ON at any time\nto quit\n");
 
     keymatrix_loop();
-}
-
-unsigned char key_matrix_state[KEY_MATRIX_HEIGHT];
-unsigned char prev_key_matrix_state[KEY_MATRIX_HEIGHT];
-
-void read_key_matrix_state(void) {
-    // read key matrix
-    disable_ints15();
-
-    for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
-        key_matrix_state[i] = (unsigned char)_rowread(~((short)(1<<i)));
-    }
-
-    restore_ints15();
-
-    // handle "ON" key
-    key_matrix_state[BREAK_KEY_ROW] |= read_break_key(); // row 1 bit 0 is unused, so we'll stick the break key status here
 }
 
 void keymatrix_loop(void) {
