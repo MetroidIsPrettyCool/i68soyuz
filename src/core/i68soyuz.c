@@ -9,7 +9,7 @@
 #include "i68s_handshake.h"
 #include "i68s_read_kbd.h"
 
-#include "i68s_meta.h"
+#include "i68s_version.h"
 
 #include "i68soyuz.h"
 
