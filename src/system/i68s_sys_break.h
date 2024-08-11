@@ -11,6 +11,6 @@
 
 /* #endif */
 
-char i68s_sys_break_key(void);
+unsigned char i68s_sys_break_key(void);
 
 #endif

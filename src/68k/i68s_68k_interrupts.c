@@ -11,7 +11,7 @@ INT_HANDLER default_int_1; // heartbeat/key scan timer
 INT_HANDLER default_int_5; // system timer
 INT_HANDLER default_int_6; // on/break key pressed
 
-volatile char break_key_pressed;
+volatile unsigned char break_key_pressed;
 
 DEFINE_INT_HANDLER(OnBreakKey) {
     break_key_pressed = 1 << BREAK_KEY_COL;
@@ -63,8 +63,8 @@ void i68_sys_cleanup(void) {
     i68s_sys_clear_keys();
 }
 
-char i68s_sys_break_key(void) {
-    char result = break_key_pressed;
+unsigned char i68s_sys_break_key(void) {
+    unsigned char result = break_key_pressed;
     break_key_pressed = 0;
     return result;
 }

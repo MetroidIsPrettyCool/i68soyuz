@@ -3,6 +3,8 @@
 
 #include "i68s_read_kbd.h"
 
+#include "i68s_sys_output.h" // tmp
+
 unsigned char key_matrix_state[KEY_MATRIX_HEIGHT] = {0};
 unsigned char prev_key_matrix_state[KEY_MATRIX_HEIGHT] = {0};
 
@@ -13,5 +15,9 @@ void read_key_matrix_state(void) {
     }
 
     // handle "ON" key
-    key_matrix_state[BREAK_KEY_ROW] |= i68s_sys_break_key(); // row 1 bit 0 is unused, so we'll stick the break key status here
+    unsigned char tmp = i68s_sys_break_key();
+    if (tmp) {
+        i68s_sys_printf("break t\n");
+    }
+    key_matrix_state[BREAK_KEY_ROW] |= tmp; // row 1 bit 0 is unused, so we'll stick the break key status here
 }
