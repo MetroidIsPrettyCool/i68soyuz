@@ -1,6 +1,6 @@
 #include <intr.h>
 
-#include "i68s_compat.h"
+#include "i68s_meta.h"
 
 #include "i68s_interrupts.h"
 

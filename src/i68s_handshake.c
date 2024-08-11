@@ -1,8 +1,7 @@
 #include <link.h>
 #include <stdio.h>
 
-#include "i68s_compat.h"
-#include "i68s_version.h"
+#include "i68s_meta.h"
 
 #include "i68s_handshake.h"
 

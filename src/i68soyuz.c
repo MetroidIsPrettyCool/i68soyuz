@@ -8,10 +8,8 @@
 
 #include "i68s_interrupts.h"
 #include "i68s_handshake.h"
-#include "i68s_version.h"
 
-// header file containing platform-specific definitions
-#include "i68s_compat.h"
+#include "i68s_meta.h"
 
 #include "i68soyuz.h"
 
