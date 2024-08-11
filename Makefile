@@ -1,7 +1,7 @@
 CC=tigcc
-CFLAGS=-std=c99 -O2 -Wall -Wextra
+CFLAGS=-std=c99 -O2 -Wall -Wextra -I./src/system
 
-SRCDIR=./src/
+SRCDIR=./src/core/
 
 CFILENAMES=i68soyuz i68s_interrupts i68s_handshake i68s_read_kbd
 HFILENAMES=i68soyuz i68s_interrupts i68s_handshake i68s_read_kbd i68s_meta
