@@ -1,11 +1,11 @@
 #include "i68s_sys_break.h"
 #include "i68s_sys_idle.h"
 #include "i68s_sys_input.h"
+#include "i68s_sys_interrupts.h"
 #include "i68s_sys_link.h"
 #include "i68s_sys_matrix.h"
 #include "i68s_sys_output.h"
 
-#include "i68s_interrupts.h"
 #include "i68s_handshake.h"
 #include "i68s_read_kbd.h"
 
@@ -14,13 +14,13 @@
 #include "i68soyuz.h"
 
 void setup(void) {
-    setup_ints();
+    i68s_sys_setup_interrupts();
 
     i68s_sys_clear_screen();
 }
 
 void cleanup(void) {
-    cleanup_ints();
+    i68s_sys_restore_all_interrupts();
 
     i68s_sys_clear_keys();
 }
@@ -39,7 +39,7 @@ void run(void) {
            __TIME__);
 
     i68s_sys_wait_for_input(); // wait for input
-    if (OSCheckBreak()) {
+    if (i68s_sys_break_key()) {
         return;
     }
 

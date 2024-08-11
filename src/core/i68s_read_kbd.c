@@ -1,20 +1,19 @@
-#include "i68s_sys_matrix.h"
 #include "i68s_sys_break.h"
-
-#include "i68s_interrupts.h"
+#include "i68s_sys_interrupts.h"
+#include "i68s_sys_matrix.h"
 
 #include "i68s_read_kbd.h"
 
 void read_key_matrix_state(void) {
     // read key matrix
-    disable_ints15();
+    i68s_sys_disable_keyboard_interrupts();
 
     for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
         key_matrix_state[i] = (unsigned char)i68s_sys_read_matrix(~((short)(1<<i)));
     }
 
-    restore_ints15();
+    i68s_sys_restore_keyboard_interrupts();
 
     // handle "ON" key
-    key_matrix_state[BREAK_KEY_ROW] |= read_break_key(); // row 1 bit 0 is unused, so we'll stick the break key status here
+    key_matrix_state[BREAK_KEY_ROW] |= i68s_sys_break_key(); // row 1 bit 0 is unused, so we'll stick the break key status here
 }
