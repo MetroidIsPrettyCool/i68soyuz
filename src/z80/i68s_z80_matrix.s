@@ -10,11 +10,10 @@ _i68s_sys_read_matrix:
         ;; a = ~(1 << )l
         ld a, 1
         inc l                   ; since l might be zero, and it's easiest to test for 0
-        or a                    ; clear carry
 loop:
         dec l
         jr z, done
-        rla
+        rlca
         jr loop
 done:
         cpl
