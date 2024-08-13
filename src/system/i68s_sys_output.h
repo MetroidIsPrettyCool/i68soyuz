@@ -1,6 +1,6 @@
-// i68_sys_clear_screen() -- an alias for whatever library call is used to clear the screen
+// i68_sys_clear_screen() -- Alias for whatever library call is used to clear the screen.
 //
-// i68_sys_printf() -- an alias for whatever library call is used for formatted output
+// i68_sys_printf() -- Alias for whatever library call is used for formatted output.
 
 #ifndef I68S_SYS_OUTPUT_H
 #define I68S_SYS_OUTPUT_H

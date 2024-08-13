@@ -1,3 +1,5 @@
+// Additional aliasing, renaming, definitions etc. for portability purposes.
+
 #ifndef I68_SYS_OTHER_H
 #define I68_SYS_OTHER_H
 
