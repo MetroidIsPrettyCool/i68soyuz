@@ -21,7 +21,7 @@ _i68s_sys_read_matrix:
 
         cpl                     ; invert byte read, might remove this at some point
         
-        ld (hl), a             ; load result into array
+        ld (hl), a              ; load result into array
         inc hl                  ; extraneous on final loop, whatever
 
         ENDR
