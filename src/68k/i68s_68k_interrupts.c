@@ -69,14 +69,16 @@ unsigned char i68s_sys_break_key(void) {
     return result;
 }
 
-unsigned char i68s_sys_read_matrix(unsigned char i) {
-    static unsigned char result;
+void i68s_sys_read_matrix(unsigned char* matrix) {
+    static unsigned short i, j;
 
-    disable_keyboard_interrupts();
-
-    result = (unsigned char)_rowread_inverted(((short)(1<<i)));
-
-    restore_keyboard_interrupts();
-
-    return result;
+    i = 0;
+    j = 1;
+    for (; i != KEY_MATRIX_HEIGHT; i++, j <<= 1) {
+        disable_keyboard_interrupts();
+        
+        matrix[i] = (unsigned char)_rowread_inverted(j);
+        
+        restore_keyboard_interrupts();
+    }
 }

@@ -5,15 +5,11 @@
 
 #if defined(USE_TI92PLUS) || defined(USE_TI89)
 
-// unsigned char i68s_sys_read_matrix(unsigned char);
 void i68s_sys_read_matrix(unsigned char*);
-
 
 #endif
 
 #if defined(__TI83p__)
-
-// unsigned char i68s_sys_read_matrix(unsigned char) __z88dk_fastcall __naked __z88dk_callee;
 
 void i68s_sys_read_matrix(unsigned char*) __z88dk_fastcall __naked __z88dk_callee;
 
