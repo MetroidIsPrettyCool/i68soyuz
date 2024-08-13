@@ -1,6 +1,6 @@
-// i68s_sys_send_bytes() -- send bytes from link port
+// unsigned short i68s_sys_send_bytes() -- Send bytes from link port. May return non-zero upon failure.
 //
-// i68s_sys_receive_bytes() -- receive bytes from link port
+// unsigned short i68s_sys_receive_bytes() -- Receive bytes from link port. May return non-zero upon failure.
 
 #ifndef I68S_SYS_LINK_H
 #define I68S_SYS_LINK_H
@@ -10,14 +10,14 @@
 #include <link.h>
 
 #define i68s_sys_send_bytes LIO_SendData
-#define i68s_sys_receive_bytes LIO_RecvData
+#define i68s_sys_receive_bytes(dest, size) LIO_RecvData(dest, size, 20)
 
 #endif
 
 #if defined(__TI83p__)
 
 unsigned short i68s_sys_send_bytes(const void* src, unsigned short size);
-unsigned short i68s_sys_receive_bytes(void* dest, unsigned short size, unsigned short WaitDelay); // WaitDelay is unused
+unsigned short i68s_sys_receive_bytes(void* dest, unsigned short size);
 
 #endif
 

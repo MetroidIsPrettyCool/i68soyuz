@@ -10,7 +10,7 @@ unsigned short i68s_sys_send_bytes(const void* src, unsigned short size) {
     return 0;
 }
 
-unsigned short i68s_sys_receive_bytes(void* dest, unsigned short size, unsigned short WaitDelay) {
+unsigned short i68s_sys_receive_bytes(void* dest, unsigned short size) {
     static unsigned short i;
     for (i = 0; i != size; i++) {
         ((unsigned char*)dest)[i] = recv_byte();

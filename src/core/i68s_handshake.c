@@ -7,6 +7,8 @@
 
 const unsigned char READY_BYTE = 0x50;
 
+const unsigned char MACHINE_ID_BYTE = MACHINE_ID;
+
 struct I68Config i68_config;
 
 struct I68Config* handshake(void) {
@@ -24,7 +26,7 @@ struct I68Config* handshake(void) {
         return &i68_config;
     }
 
-    link_error = i68s_sys_receive_bytes(i68_config.apollo_version, sizeof(i68_config.apollo_version), 20); // timeout of 1 second/20 timer ticks
+    link_error = i68s_sys_receive_bytes(i68_config.apollo_version, sizeof(i68_config.apollo_version));
     if (link_error) {
         i68_config.handshake_result = HANDSHAKE_READ_ERROR;
         return &i68_config;
@@ -39,7 +41,7 @@ struct I68Config* handshake(void) {
 
     // transmit machine ID
 
-    link_error = i68s_sys_send_bytes(&MACHINE_ID, sizeof(MACHINE_ID));
+    link_error = i68s_sys_send_bytes(&MACHINE_ID_BYTE, sizeof(MACHINE_ID_BYTE));
     if (link_error) {
         i68_config.handshake_result = HANDSHAKE_WRITE_ERROR;
         return &i68_config;

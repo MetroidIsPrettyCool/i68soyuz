@@ -1,11 +1,11 @@
 #include <kbd.h>
 #include <intr.h>
+#include <stdio.h>
 
 #include "i68s_sys_break.h"
 #include "i68s_sys_input.h"
 #include "i68s_sys_matrix.h"
 #include "i68s_sys_setup_cleanup.h"
-#include "i68s_sys_output.h"
 
 INT_HANDLER default_int_1; // heartbeat/key scan timer
 INT_HANDLER default_int_5; // system timer
@@ -54,13 +54,13 @@ static void restore_all_interrupts(void) {
 void i68_sys_setup(void) {
     setup_interrupts();
 
-    i68s_sys_clear_screen();
+    clrscr();
 }
 
 void i68_sys_cleanup(void) {
     restore_all_interrupts();
 
-    i68s_sys_clear_keys();
+    GKeyFlush();
 }
 
 unsigned char i68s_sys_break_key(void) {
