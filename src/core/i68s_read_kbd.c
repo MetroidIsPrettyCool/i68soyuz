@@ -10,9 +10,11 @@ unsigned char prev_key_matrix_state[KEY_MATRIX_HEIGHT] = {0};
 
 void read_key_matrix_state(void) {
     // read key matrix
-    for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
-        key_matrix_state[i] = i68s_sys_read_matrix(i);
-    }
+    /* for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) { */
+    /*     key_matrix_state[i] = i68s_sys_read_matrix(i); */
+    /* } */
+
+    i68s_sys_read_matrix(key_matrix_state);
 
     // handle "ON" key
     unsigned char tmp = i68s_sys_break_key();
