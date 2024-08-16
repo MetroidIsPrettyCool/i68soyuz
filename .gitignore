@@ -1,3 +1,6 @@
 *~
 *.o
 bin/ti83p/i68soyuz
+*.8xp
+*.89z
+*.9xz
