@@ -16,7 +16,7 @@ volatile unsigned char break_key_pressed;
 DEFINE_INT_HANDLER(OnBreakKey) {
     break_key_pressed = 1 << BREAK_KEY_COL;
 
-    // ExecuteHandler(default_int_6);
+    ExecuteHandler(default_int_6);
 }
 
 static void setup_interrupts(void) {

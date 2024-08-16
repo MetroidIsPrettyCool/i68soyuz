@@ -1,3 +1,4 @@
+#include "i68s_sys_apd.h"
 #include "i68s_sys_break.h"
 #include "i68s_sys_idle.h"
 #include "i68s_sys_input.h"
@@ -14,7 +15,7 @@
 
 #include "i68soyuz.h"
 
-const unsigned char SOYUZ_VER[3] = {0, 5, 0};
+const unsigned char SOYUZ_VER[3] = {0, 5, 1};
 
 void run(void) {
     i68s_sys_printf("i68 foreign component\n\"soyuz\"\n\n"
@@ -85,7 +86,15 @@ void keymatrix_loop(void) {
     read_key_matrix_state();
 
     while (1) {
-
+        printf("%lu\n", OSTimerCurVal(APD_TIMER)); // TMP
+        
+        if (i68s_sys_apd_expired()) {
+            i68_sys_cleanup();
+            i68s_sys_off();
+            i68s_sys_reset_apd();
+            i68_sys_setup();
+        }
+                
         for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
             prev_key_matrix_state[i] = key_matrix_state[i];
         }
@@ -94,16 +103,17 @@ void keymatrix_loop(void) {
 
         // check key_matrix_states aren't equal
         char key_matrix_states_equal;
-        for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
+        for (unsigned int i = 0; i != sizeof(key_matrix_state); i++) {
             key_matrix_states_equal = (prev_key_matrix_state[i] == key_matrix_state[i]);
             if (!key_matrix_states_equal) {
                 break;
             }
         }
-        if (key_matrix_states_equal) { // if nothing's changed we don't need to transmit
-            continue;
-        }
+        
+        if (key_matrix_states_equal) continue; // if nothing's changed we don't need to transmit
 
+        i68s_sys_reset_apd();
+        
         unsigned short send_error = i68s_sys_send_bytes(key_matrix_state, sizeof(key_matrix_state));
         if (send_error) {
             i68s_sys_printf("Error sending data: %d\n", send_error);
