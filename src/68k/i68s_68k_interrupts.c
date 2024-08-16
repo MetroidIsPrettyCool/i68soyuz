@@ -1,14 +1,15 @@
 #include <kbd.h>
 #include <intr.h>
 #include <stdio.h>
+#include <system.h>
 
+#include "i68s_sys_apd.h"
 #include "i68s_sys_break.h"
 #include "i68s_sys_input.h"
 #include "i68s_sys_matrix.h"
 #include "i68s_sys_setup_cleanup.h"
 
 INT_HANDLER default_int_1; // heartbeat/key scan timer
-INT_HANDLER default_int_5; // system timer
 INT_HANDLER default_int_6; // on/break key pressed
 
 volatile unsigned char break_key_pressed;
@@ -22,7 +23,6 @@ DEFINE_INT_HANDLER(OnBreakKey) {
 static void setup_interrupts(void) {
     // save the default interrupt handlers
     default_int_1 = GetIntVec(AUTO_INT_1);
-    default_int_5 = GetIntVec(AUTO_INT_5);
 
     default_int_6 = GetIntVec(AUTO_INT_6);
 
@@ -36,13 +36,11 @@ static void setup_interrupts(void) {
 static void disable_keyboard_interrupts(void) {
     // override the default interrupt handlers
     SetIntVec(AUTO_INT_1, DUMMY_HANDLER);
-    SetIntVec(AUTO_INT_5, DUMMY_HANDLER);
 }
 
 static void restore_keyboard_interrupts(void) {
     // restore the default interrupt handlers
     SetIntVec(AUTO_INT_1, default_int_1);
-    SetIntVec(AUTO_INT_5, default_int_5);
 }
 
 static void restore_all_interrupts(void) {
@@ -61,6 +59,8 @@ void i68_sys_cleanup(void) {
     restore_all_interrupts();
 
     GKeyFlush();
+
+    OSClearBreak();
 }
 
 unsigned char i68s_sys_break_key(void) {
@@ -81,4 +81,11 @@ void i68s_sys_read_matrix(unsigned char* matrix) {
         
         restore_keyboard_interrupts();
     }
+}
+
+void i68s_sys_off(void) {
+    SetIntVec(AUTO_INT_6, default_int_6);
+    off();
+    OSTimerRestart(APD_TIMER);
+    SetIntVec(AUTO_INT_6, OnBreakKey);
 }

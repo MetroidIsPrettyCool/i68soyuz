@@ -11,7 +11,7 @@
 
 #include <system.h>
 
-#define i68s_sys_off off
+void i68s_sys_off(void);
 #define i68s_sys_reset_apd() OSTimerRestart(APD_TIMER)
 #define i68s_sys_apd_expired() OSTimerExpired(APD_TIMER)
 

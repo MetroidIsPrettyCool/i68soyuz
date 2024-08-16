@@ -86,13 +86,9 @@ void keymatrix_loop(void) {
     read_key_matrix_state();
 
     while (1) {
-        printf("%lu\n", OSTimerCurVal(APD_TIMER)); // TMP
         
         if (i68s_sys_apd_expired()) {
-            i68_sys_cleanup();
             i68s_sys_off();
-            i68s_sys_reset_apd();
-            i68_sys_setup();
         }
                 
         for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
@@ -123,7 +119,7 @@ void keymatrix_loop(void) {
             return;
         }
 
-        i68s_sys_idle();
+        i68s_sys_idle();        
     }
 }
 
