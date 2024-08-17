@@ -83,12 +83,12 @@ void run(void) {
 }
 
 void keymatrix_loop(void) {
-    OSSetSR(0x0100);
-    
+    i68s_sys_read_loop_setup();
+
     read_key_matrix_state();
 
     while (1) {
-        
+
         if (i68s_sys_apd_expired()) {
             i68s_sys_off();
         }
@@ -124,7 +124,6 @@ void keymatrix_loop(void) {
         i68s_sys_idle();
     }
 
-    OSSetSR(0x0000);
 }
 
 void main(void) {

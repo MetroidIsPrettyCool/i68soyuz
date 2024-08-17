@@ -46,7 +46,7 @@ static void restore_keyboard_interrupts(void) {
     SetIntVec(AUTO_INT_5, default_int_5);
 }
 
-static void restore_all_interrupts(void) {
+static void restore_all_interrupt_handlers(void) {
     // restore the default interrupt handlers
     restore_keyboard_interrupts();
     SetIntVec(AUTO_INT_6, default_int_6);
@@ -59,7 +59,9 @@ void i68_sys_setup(void) {
 }
 
 void i68_sys_cleanup(void) {
-    restore_all_interrupts();
+    OSSetSR(0x0000); // stop masking interrupts
+
+    restore_all_interrupt_handlers();
 
     GKeyFlush();
 
@@ -79,9 +81,9 @@ void i68s_sys_read_matrix(unsigned char* matrix) {
     j = 1;
     for (; i != KEY_MATRIX_HEIGHT; i++, j <<= 1) {
         disable_keyboard_interrupts();
-        
+
         matrix[i] = (unsigned char)_rowread_inverted(j);
-        
+
         restore_keyboard_interrupts();
     }
 }
