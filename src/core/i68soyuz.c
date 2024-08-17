@@ -83,6 +83,8 @@ void run(void) {
 }
 
 void keymatrix_loop(void) {
+    OSSetSR(0x0100);
+    
     read_key_matrix_state();
 
     while (1) {
@@ -90,7 +92,7 @@ void keymatrix_loop(void) {
         if (i68s_sys_apd_expired()) {
             i68s_sys_off();
         }
-                
+
         for (unsigned int i = 0; i < sizeof(key_matrix_state); i++) {
             prev_key_matrix_state[i] = key_matrix_state[i];
         }
@@ -105,11 +107,11 @@ void keymatrix_loop(void) {
                 break;
             }
         }
-        
+
         if (key_matrix_states_equal) continue; // if nothing's changed we don't need to transmit
 
         i68s_sys_reset_apd();
-        
+
         unsigned short send_error = i68s_sys_send_bytes(key_matrix_state, sizeof(key_matrix_state));
         if (send_error) {
             i68s_sys_printf("Error sending data: %d\n", send_error);
@@ -119,8 +121,10 @@ void keymatrix_loop(void) {
             return;
         }
 
-        i68s_sys_idle();        
+        i68s_sys_idle();
     }
+
+    OSSetSR(0x0000);
 }
 
 void main(void) {

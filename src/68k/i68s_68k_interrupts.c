@@ -10,6 +10,7 @@
 #include "i68s_sys_setup_cleanup.h"
 
 INT_HANDLER default_int_1; // heartbeat/key scan timer
+INT_HANDLER default_int_5; // system timer
 INT_HANDLER default_int_6; // on/break key pressed
 
 volatile unsigned char break_key_pressed;
@@ -17,13 +18,13 @@ volatile unsigned char break_key_pressed;
 DEFINE_INT_HANDLER(OnBreakKey) {
     break_key_pressed = 1 << BREAK_KEY_COL;
 
-    ExecuteHandler(default_int_6);
+    // ExecuteHandler(default_int_6);
 }
 
 static void setup_interrupts(void) {
     // save the default interrupt handlers
     default_int_1 = GetIntVec(AUTO_INT_1);
-
+    default_int_5 = GetIntVec(AUTO_INT_5);
     default_int_6 = GetIntVec(AUTO_INT_6);
 
     // override on key pressed autovector
@@ -36,11 +37,13 @@ static void setup_interrupts(void) {
 static void disable_keyboard_interrupts(void) {
     // override the default interrupt handlers
     SetIntVec(AUTO_INT_1, DUMMY_HANDLER);
+    SetIntVec(AUTO_INT_5, DUMMY_HANDLER);
 }
 
 static void restore_keyboard_interrupts(void) {
     // restore the default interrupt handlers
     SetIntVec(AUTO_INT_1, default_int_1);
+    SetIntVec(AUTO_INT_5, default_int_5);
 }
 
 static void restore_all_interrupts(void) {
