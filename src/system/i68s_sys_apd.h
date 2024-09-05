@@ -19,9 +19,12 @@ void i68s_sys_off(void);
 
 #if defined(__TI83p__)
 
-void i68s_sys_off(void);
-void i68s_sys_reset_apd(void);
-unsigned char i68s_sys_apd_expired(void);
+void i68s_sys_off(void) __naked;
+void i68s_sys_reset_apd(void) __naked;
+unsigned char i68s_sys_apd_expired(void) __naked;
+
+/* #define i68s_sys_off() ; */
+/* #define i68s_sys_apd_expired() 0 */
 
 #endif
 

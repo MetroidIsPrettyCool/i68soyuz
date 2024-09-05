@@ -8,7 +8,7 @@ LDFLAGS = $(CFLAGS)
 AS = z88dk-z80asm
 ASFLAGS = -mti83plus -I$(ZCCCFG)/../target/ti83p/def # ugly, works
 
-OBJFILES += i68s_z80_break.o i68s_z80_link_bytes.o i68s_z80_link.o i68s_z80_matrix.o i68s_z80_setup_cleanup.o
+OBJFILES += i68s_z80_apd.o i68s_z80_break.o i68s_z80_link_bytes.o i68s_z80_link.o i68s_z80_matrix.o i68s_z80_setup_cleanup.o
 
 i68soyuz.8xp: i68soyuz
 	z88dk-appmake +ti8x -o $@ -b $^
