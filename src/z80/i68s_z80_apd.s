@@ -5,22 +5,14 @@ _i68s_sys_reset_apd:
         INVOKE _ApdSetup
         ret
 
-;;         ;; copy-pasted from https://jgmalcolm.com/z80/advanced/onof, unsure of exactly how it works
-;; _i68s_sys_off:
-;;         GLOBAL _i68s_sys_off
-;;         ld a,1
-;;         out (3),a
-;;         halt
-;;         ld a,11
-;;         out (3),a
-;;         ret
-
-;; _i68s_sys_apd_expired:
-;;         GLOBAL _i68s_sys_apd_expired
-;;         ld a, ($8449)
-;;         or a
-;;         ld l, 0
-;;         jp NZ, skip
-;;         ld l, 1
-;; skip:
-;;         ret
+_i68s_sys_read_loop_setup:
+        GLOBAL _i68s_sys_read_loop_setup
+        push af
+        push hl
+        INVOKE _EnableApd
+        ld a, (IY + 8)
+        or 0b1100
+        ld (IY + 8), a
+        pop hl
+        pop af
+        ret

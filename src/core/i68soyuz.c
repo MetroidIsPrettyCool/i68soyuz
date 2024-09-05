@@ -88,17 +88,8 @@ void keymatrix_loop(void) {
     read_key_matrix_state();
 
     while (1) {
-
-        // TMP
-            __asm__("push af\n"
-            "push hl\n"
-            "RST 28H\nWORD $4C87\n"
-            "ld a, (IY + 8)\n"
-            "or 0b1100\n"
-            "ld (IY + 8), a\n"
-            "pop hl\n"
-            "pop af\n");
-        printk("%u\n", *((unsigned short*)0x8448));
+        /* // tmp */
+        /* printk("%u\n", *((unsigned short*)0x8448)); */
 
         if (i68s_sys_apd_expired()) {
             i68s_sys_off();

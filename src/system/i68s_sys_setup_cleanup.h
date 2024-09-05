@@ -19,7 +19,7 @@ void i68_sys_cleanup(void);
 
 #if defined(__TI83p__)
 
-#define i68s_sys_read_loop_setup()
+void i68s_sys_read_loop_setup(void) __naked;
 
 #endif
 
