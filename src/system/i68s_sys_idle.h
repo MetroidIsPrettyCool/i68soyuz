@@ -15,7 +15,7 @@ void i68s_sys_idle(void);
 
 #if defined(__TI83p__)
 
-#define i68s_sys_idle() __asm__("halt")
+#define i68s_sys_idle() __asm__("halt\nhalt\nhalt\nhalt\nhalt\nhalt\nhalt\nhalt\n")
 
 #endif
 

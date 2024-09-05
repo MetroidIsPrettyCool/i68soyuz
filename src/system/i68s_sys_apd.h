@@ -19,12 +19,16 @@ void i68s_sys_off(void);
 
 #if defined(__TI83p__)
 
-void i68s_sys_off(void) __naked;
+/* void i68s_sys_off(void) __naked; */
 void i68s_sys_reset_apd(void) __naked;
-unsigned char i68s_sys_apd_expired(void) __naked;
+/* unsigned char i68s_sys_apd_expired(void) __naked; */
 
 /* #define i68s_sys_off() ; */
-/* #define i68s_sys_apd_expired() 0 */
+/* #define i68s_sys_apd_expired() !*((unsigned short*)0x8448) */
+
+// the "powering off" part of APD is handled by TIOS on the TI-83 Plus
+#define i68s_sys_off() ;
+#define i68s_sys_apd_expired() 0
 
 #endif
 
