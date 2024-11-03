@@ -1,4 +1,4 @@
-.PHONY: clean all ti92p
+.PHONY: clean all ti92p ti89 ti83p
 
 all: ti92p ti89 ti83p
 
