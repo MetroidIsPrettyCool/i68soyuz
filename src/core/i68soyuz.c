@@ -14,7 +14,7 @@
 
 #include "i68soyuz.h"
 
-const unsigned char SOYUZ_VER[3] = {0, 5, 0};
+const unsigned char SOYUZ_VER[3] = {0, 6, 0};
 
 void run(void) {
     i68s_sys_printf("i68 foreign component\n\"soyuz\"\n\n"
