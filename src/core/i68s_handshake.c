@@ -5,8 +5,6 @@
 
 #include "i68s_handshake.h"
 
-const unsigned char READY_BYTE = 0x50;
-
 const unsigned char MACHINE_ID_BYTE = MACHINE_ID;
 
 struct I68Config i68_config;
@@ -14,11 +12,11 @@ struct I68Config i68_config;
 struct I68Config* handshake(void) {
     unsigned short link_error;
 
-    link_error = i68s_sys_send_bytes(&READY_BYTE, sizeof(READY_BYTE));
-    if (link_error) {
-        i68_config.handshake_result = HANDSHAKE_WRITE_ERROR;
-        return &i68_config;
-    }
+    /* link_error = i68s_sys_send_bytes(&READY_BYTE, sizeof(READY_BYTE)); */
+    /* if (link_error) { */
+    /*     i68_config.handshake_result = HANDSHAKE_WRITE_ERROR; */
+    /*     return &i68_config; */
+    /* } */
 
     link_error = i68s_sys_send_bytes(SOYUZ_VER, sizeof(SOYUZ_VER));
     if (link_error) {
