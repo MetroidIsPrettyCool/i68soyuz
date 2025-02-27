@@ -18,21 +18,18 @@ const unsigned char SOYUZ_VER[3] = {0, 5, 0};
 
 void run(void) {
     i68s_sys_printf("i68 foreign component\n\"soyuz\"\n\n"
-           "Version %d.%d.%d\n"
-           "Built %s %s\n\n"
-           "Start apollo then press\n"
-           "any key to continue\n\n"
-           "Or press ON to abort\n",
-           SOYUZ_VER[MAJOR],
-           SOYUZ_VER[MINOR],
-           SOYUZ_VER[PATCH],
-           __DATE__,
-           __TIME__);
+                    "Version %d.%d.%d\n"
+                    "Built %s %s\n\n",
+                    SOYUZ_VER[MAJOR],
+                    SOYUZ_VER[MINOR],
+                    SOYUZ_VER[PATCH],
+                    __DATE__,
+                    __TIME__);
 
-    i68s_sys_wait_for_input(); // wait for input
-    if (i68s_sys_break_key()) {
-        return;
-    }
+    /* i68s_sys_wait_for_input(); // wait for input */
+    /* if (i68s_sys_break_key()) { */
+    /*     return; */
+    /* } */
 
     i68s_sys_printf("\nHandshaking...\n");
 
